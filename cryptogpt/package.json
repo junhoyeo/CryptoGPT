@@ -1,0 +1,24 @@
+{
+  "name": "@junhoyeo/crypto-gpt",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/junhoyeo/crypto-gpt",
+  "author": "Junho Yeo <i@junho.io>",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "format": "prettier --write .",
+    "build": "rm -rf dist && tsc && tsc-alias",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.1.4",
+    "ethers": "^6.5.1",
+    "langchain": "^0.0.92",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.3.0",
+    "tsc-alias": "^1.8.6",
+    "typescript": "^5.1.3"
+  }
+}

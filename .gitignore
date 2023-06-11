@@ -17,7 +17,8 @@ dist
 build
 *.tsbuildinfo
 
-## Yarn
+# Yarn
+.yarn-integrity
 .yarn/cache
 .yarn/unplugged
 .yarn/build-state.yml
