@@ -5,7 +5,7 @@ import findWorkspaceRoot from 'find-yarn-workspace-root';
 
 const WORKSPACE_ROOT_PATH = findWorkspaceRoot(null) ?? '';
 dotenv.config({
-  path: path.resolve(WORKSPACE_ROOT_PATH, 'cryptogpt/.env'),
+  path: path.resolve(WORKSPACE_ROOT_PATH, '.env'),
 });
 
 export const provider = new JsonRpcProvider('https://public-en-baobab.klaytn.net');

@@ -9,3 +9,4 @@
 .pnp.loader.mjs
 
 *.md
+!README.md

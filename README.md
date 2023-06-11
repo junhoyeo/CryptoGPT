@@ -10,7 +10,23 @@
 - ✸ 🪪 Enabling Language Learning Models (LLMs) to **establish their own unique identities** within the blockchain.
 - ✸ 🇦🇶 **Make the name _CryptoGPT_ great again.** Not affiliated with [LayerAI](https://layerai.org/) or any other (scammy) web3 projects.
 
-## Usage
+## 🚀 Usage - [OpenAI API](https://openai.com/blog/openai-api)
+
+### 1. Clone this repo
+
+```bash
+git clone https://github.com/junhoyeo/CryptoGPT
+```
+
+### 2. Configurate `${project-root}/.env`
+
+```bash
+OPENAI_API_KEY=sk-*****
+WALLET_PRIVATE_KEY=0x*****
+OPENAI_API_BASE_PATH=
+```
+
+## 🚀 Usage - `gpt4free` (WIP)
 
 ### 1. Clone this repo
 
@@ -41,4 +57,12 @@ cd .. # back to project root
 
 ```
 python3 gpt4free-openai-proxy/main.py
+```
+
+### 4. Configure `${project-root}/.env`
+
+```bash
+OPENAI_API_KEY=sk-*****
+WALLET_PRIVATE_KEY=0x*****
+OPENAI_API_BASE_PATH=http://127.0.0.1:5000
 ```
