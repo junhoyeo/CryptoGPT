@@ -34,5 +34,11 @@ pip3 install -r requirements.txt
 ```
 
 ```bash
-streamlit run gui/streamlit_app.py
+cd .. # back to project root
+```
+
+### 3. Run `gpt4free` -> `OpenAI API Proxy`
+
+```
+python3 gpt4free-openai-proxy/main.py
 ```
