@@ -10,33 +10,28 @@ require('dotenv').config();
 const store = new InMemoryFileStore();
 
 export const run = async () => {
-  // const vectorStore = new MemoryVectorStore(new OpenAIEmbeddings());
   const model = new OpenAI({
     temperature: 0,
     openAIApiKey: process.env.OPENAI_API_KEY,
   });
 
-  // random wallet
   const provider = new JsonRpcProvider('https://public-en-baobab.klaytn.net');
-  // const wallet = Wallet.createRandom()
   const wallet = new Wallet(process.env.WALLET_PRIVATE_KEY || '');
   const signer = wallet.connect(provider);
-  console.log(wallet.address);
-  // console.log(wallet.privateKey)
 
   const tools = [
     new DynamicTool({
-      name: 'eth.address',
-      description: 'call this to get your wallet address',
+      name: 'address',
+      description: 'Obtain your wallet address',
       func: async () => wallet.address,
     }),
     new DynamicTool({
-      name: 'eth.balance',
-      description: 'call this to get wallet balance of any input address',
-      func: async (address) => {
+      name: 'balance',
+      description: 'Obtain raw balance of any given Ethereum address',
+      func: async (_addr: any) => {
         try {
+          let address: string = typeof _addr === 'string' ? _addr : _addr.address;
           const balance = await provider.getBalance(address);
-          console.log({ balance });
           return balance.toString();
         } catch (e) {
           console.log(e);
@@ -44,24 +39,23 @@ export const run = async () => {
         }
       },
     }),
-    // send with params as schema
     new DynamicStructuredTool({
-      name: 'eth.send',
+      name: 'send',
       description:
-        'call this to send transactions with your wallet. props are {to,value,nonce,gasLimit,gasPrice,data,chainId}. Leave values blank if you dont need them(ex> you dont usually add nonce). This tool returns transaction hash after executing your transaction.',
+        'Send transactions from your wallet and returns txHash after successful execution. Properties: {to,value,nonce,gasLimit,gasPrice,data,chainId}(Omit any if unknown)',
       schema: z.object({
         to: z.string(),
-        value: z.string().or(z.number()),
-        nonce: z.string().or(z.number()),
-        gasLimit: z.string().or(z.number()),
-        gasPrice: z.string().or(z.number()),
-        data: z.string(),
-        chainId: z.string().or(z.number()),
+        value: z.string().or(z.number()).optional(),
+        nonce: z.string().or(z.number()).optional(),
+        gasLimit: z.string().or(z.number()).optional(),
+        gasPrice: z.string().or(z.number()).optional(),
+        data: z.string().optional(),
+        chainId: z.string().or(z.number()).optional(),
       }),
       func: async (params) => {
-        const cleaned = Object.fromEntries(Object.entries(params).filter(([_, v]) => v !== ''));
-        const tx = await signer.sendTransaction(cleaned);
-        return tx.hash;
+        const tx = Object.fromEntries(Object.entries(params).filter(([_, v]) => v !== ''));
+        const receipt = await signer.sendTransaction(tx);
+        return receipt.hash;
       },
     }),
   ];
@@ -84,7 +78,7 @@ export const run = async () => {
 
   console.log('Loaded agent.');
 
-  const input = `Send 0 eth to your wallet address using your wallet, and return the transaction hash(hint: you might want to get your address first using eth.address tool).`;
+  const input = `Send 0 eth to your wallet address using your wallet, and return the transaction hash.`;
 
   console.log(`Executing with input "${input}"...`);
 
@@ -92,12 +86,6 @@ export const run = async () => {
     const result = await executor.call({ input });
 
     console.log(`Got output ${result.output}`);
-
-    // // send 0 eth transaction to yourself
-    // const input2 = `Send 0 eth to yourself`;
-
-    // console.log(`Executing with input "${input2}"...`);
-    // const result2 = await executor.call({ input: input2,  });
   } catch (e) {
     console.log(e);
   }
