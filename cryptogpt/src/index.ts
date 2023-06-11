@@ -20,33 +20,33 @@ export const run = async () => {
       temperature: 0,
       openAIApiKey: process.env.OPENAI_API_KEY,
       verbose: true,
+      maxConcurrency: 2,
+      maxRetries: 20,
     },
-    { basePath: 'http://127.0.0.1:5000' },
+    // { basePath: 'http://127.0.0.1:5000' },
   );
+  // const llm = new HuggingFaceInference({
+  //   model: 'gpt2-large',
+  //   apiKey: process.env.HUGGINGFACEHUB_API_KEY,
+  //   temperature: 0,
+  // });
   console.log({ wallet: wallet.address });
 
   const PLANNER_SYSTEM_PROMPT_MESSAGE_TEMPLATE = [
-    `Let's first understand the problem and devise a plan to solve the problem.`,
-    `Please output the plan starting with the header "Plan:"`,
-    `and then followed by a numbered list of steps.`,
-    `Please make the plan the minimum number of steps required`,
-    `to answer the query or complete the task accurately and precisely.`,
-    `Your steps should be general, and should not require a specific method to solve a step. If the task is a question,`,
-    `the final step in the plan must be the following: "Given the above steps taken,`,
-    `please respond to the original query."`,
-    `At the end of your plan, say "<END_OF_PLAN>"`,
+    `Understand the task, create a concise plan labeled 'Plan:', listing steps to accomplish it. Ensure accuracy and generality of steps. If the task is a question, the last step should be answering it. Finish the plan with '<END_OF_PLAN>'`,
   ].join(' ');
 
-  const getToolsOverview = () => {
-    const formattedStrings = tools.map((tool) => `'${tool.name}': ${tool.description}`);
-    const uniqueStrings = [...new Set(formattedStrings)];
-    return uniqueStrings.join('\n');
-  };
+  // const getToolsOverview = () => {
+  //   const formattedStrings = tools.map((tool) => `'${tool.name}': ${tool.description}`);
+  //   const uniqueStrings = [...new Set(formattedStrings)];
+  //   return uniqueStrings.join('\n');
+  // };
 
   const PLANNER_CHAT_PROMPT = /* #__PURE__ */ ChatPromptTemplate.fromPromptMessages([
     /* #__PURE__ */ SystemMessagePromptTemplate.fromTemplate(PLANNER_SYSTEM_PROMPT_MESSAGE_TEMPLATE),
     /* #__PURE__ */ HumanMessagePromptTemplate.fromTemplate(
-      `Your wallet address is ${wallet.address}.\n{input}`,
+      // `Your wallet address is ${wallet.address}.\n{input}`,
+      `{input}`,
     ),
   ]);
   const plannerLlmChain = new LLMChain({
@@ -71,7 +71,7 @@ export const run = async () => {
   //   callbacks: { handleToolEnd: console.log } as any,
   // });
 
-  const input = `What's the txHash after sending zero value transaction to CryptoGPT's wallet address with CryptoGPT's wallet?`;
+  const input = `What's the txHash after sending zero value transaction to your wallet address with your wallet?`;
   console.log(`Executing with input "${input}"...`);
 
   try {

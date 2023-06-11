@@ -5,7 +5,7 @@ import { provider, signer, wallet } from './wallet';
 export const tools = [
   new DynamicTool({
     name: 'eth_address',
-    description: "Obtain CryptoGPT's wallet address",
+    description: 'Obtain my wallet address',
     func: async () => wallet.address,
   }),
   new DynamicTool({
@@ -24,7 +24,7 @@ export const tools = [
   new DynamicStructuredTool({
     name: 'eth_send',
     description:
-      "Sign and Broadcast transactions using CryptoGPT's wallet. Returns txHash after successful execution. Properties are object of to,value,nonce,gasLimit,gasPrice,data,chainId. Leave property blank if unknown or unnecessary",
+      'Sign and Broadcast transactions using my wallet. Returns txHash after successful execution. Properties are object of to,value,nonce,gasLimit,gasPrice,data,chainId. Leave property blank if unknown or unnecessary',
     schema: z.object({
       to: z.string(),
       value: z.any().optional(),

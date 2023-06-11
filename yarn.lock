@@ -273,6 +273,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@huggingface/inference@npm:1":
+  version: 1.8.0
+  resolution: "@huggingface/inference@npm:1.8.0"
+  checksum: c70edae3917de67ff0cb25b691f21c8c067993dc4878eb7d6a89b0c0ddfd36585e77841a747c561b91b4719cf2b08340da2cb414bac0505238570c3c95d65a39
+  languageName: node
+  linkType: hard
+
 "@ianvs/prettier-plugin-sort-imports@npm:^4.0.2":
   version: 4.0.2
   resolution: "@ianvs/prettier-plugin-sort-imports@npm:4.0.2"
@@ -346,6 +353,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@junhoyeo/crypto-gpt@workspace:cryptogpt"
   dependencies:
+    "@huggingface/inference": 1
     "@types/node": ^20.3.0
     dotenv: ^16.1.4
     ethers: ^6.5.1
