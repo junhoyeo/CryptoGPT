@@ -4,12 +4,12 @@ import { provider, signer, wallet } from './wallet';
 
 export const tools = [
   new DynamicTool({
-    name: 'address',
-    description: 'Obtain your wallet address',
+    name: 'eth_address',
+    description: "Obtain CryptoGPT's wallet address",
     func: async () => wallet.address,
   }),
   new DynamicTool({
-    name: 'balance',
+    name: 'eth_balance',
     description: 'Obtain raw balance of any given Ethereum address',
     func: async (address: any) => {
       try {
@@ -22,17 +22,17 @@ export const tools = [
     },
   }),
   new DynamicStructuredTool({
-    name: 'send',
+    name: 'eth_send',
     description:
-      'Send transactions from your wallet and returns txHash after successful execution. Omit any properties if unknown',
+      "Sign and Broadcast transactions using CryptoGPT's wallet. Returns txHash after successful execution. Properties are object of to,value,nonce,gasLimit,gasPrice,data,chainId(Omit any properties if unknown/unnecessary)",
     schema: z.object({
       to: z.string(),
-      value: z.string().or(z.number()).optional(),
-      nonce: z.string().or(z.number()).optional(),
-      gasLimit: z.string().or(z.number()).optional(),
-      gasPrice: z.string().or(z.number()).optional(),
+      value: z.any().optional(),
+      nonce: z.any().optional(),
+      gasLimit: z.any().optional(),
+      gasPrice: z.any().optional(),
       data: z.string().optional(),
-      chainId: z.string().or(z.number()).optional(),
+      chainId: z.any().optional(),
     }),
     func: async (params) => {
       const tx = Object.fromEntries(Object.entries(params).filter(([_, v]) => v !== ''));

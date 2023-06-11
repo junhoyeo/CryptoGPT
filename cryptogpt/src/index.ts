@@ -23,7 +23,7 @@ export const run = async () => {
   });
   console.log('Loaded agent.');
 
-  const input = `What's the txHash after sending zero value transaction to your wallet address with your wallet?`;
+  const input = `What's the txHash after sending zero value transaction to CryptoGPT's wallet address with CryptoGPT's wallet?`;
   console.log(`Executing with input "${input}"...`);
 
   try {
