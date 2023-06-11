@@ -10,7 +10,10 @@ const outputParser = new OutputParser();
 
 export const run = async () => {
   const autogpt = AutoGPT.fromLLMAndTools(
-    new ChatOpenAI({ temperature: 0, openAIApiKey: process.env.OPENAI_API_KEY }),
+    new ChatOpenAI(
+      { temperature: 0, openAIApiKey: process.env.OPENAI_API_KEY },
+      { basePath: process.env.OPENAI_API_BASE_PATH },
+    ),
     tools,
     {
       memory: vectorStore.asRetriever(),
