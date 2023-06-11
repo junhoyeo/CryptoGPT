@@ -51,7 +51,7 @@ function balanceBraces(jsonString: string): string | null {
 }
 
 function addQuotesToPropertyNames(jsonString: string): string | null {
-  const replaceFunc = (match: string, p1: string) => `"${p1}":`;
+  const replaceFunc = (_match: string, p1: string) => `"${p1}":`;
   const propertyNamePattern = /(\w+):/g;
   const correctedJsonString = jsonString.replace(propertyNamePattern, replaceFunc);
   try {

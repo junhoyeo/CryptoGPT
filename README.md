@@ -16,27 +16,27 @@
 Executing with input "Send zero value transaction to your wallet address with your wallet. Check wallet address is correct. And print that transaction's hash"...
 {
     "thoughts": {
-        "text": "I will use the 'eth_address' command to obtain my wallet address.",
+        "text": "I will use the 'evm_address' command to obtain my wallet address.",
         "reasoning": "I need to obtain my wallet address to send a zero value transaction to it.",
-        "plan": "- Use 'eth_address' command to obtain my wallet address\n- Verify that the address is correct\n- Use 'eth_send' command to send a zero value transaction to my wallet address\n- Print the transaction hash",
+        "plan": "- Use 'evm_address' command to obtain my wallet address\n- Verify that the address is correct\n- Use 'evm_send' command to send a zero value transaction to my wallet address\n- Print the transaction hash",
         "criticism": "I need to make sure that I verify the wallet address before sending the transaction.",
-        "speak": "I will use the 'eth_address' command to obtain my wallet address."
+        "speak": "I will use the 'evm_address' command to obtain my wallet address."
     },
     "command": {
-        "name": "eth_address",
+        "name": "evm_address",
         "args": {}
     }
 }
 {
     "thoughts": {
-        "text": "I will use the 'eth_send' command to send a zero value transaction to my wallet address.",
+        "text": "I will use the 'evm_send' command to send a zero value transaction to my wallet address.",
         "reasoning": "I need to send a zero value transaction to my wallet address to verify that the address is correct.",
-        "plan": "- Use 'eth_send' command to send a zero value transaction to my wallet address\n- Print the transaction hash",
+        "plan": "- Use 'evm_send' command to send a zero value transaction to my wallet address\n- Print the transaction hash",
         "criticism": "I need to make sure that I set the 'value' property to 0.",
-        "speak": "I will use the 'eth_send' command to send a zero value transaction to my wallet address."
+        "speak": "I will use the 'evm_send' command to send a zero value transaction to my wallet address."
     },
     "command": {
-        "name": "eth_send",
+        "name": "evm_send",
         "args": {
             "to": "0x2eA4517e5559939C4Ac35F3b6d6e537051F225fD",
             "value": 0
@@ -92,6 +92,7 @@ git clone https://github.com/junhoyeo/CryptoGPT
 OPENAI_API_KEY=sk-*****
 WALLET_PRIVATE_KEY=0x*****
 OPENAI_API_BASE_PATH=
+JSON_RPC_URL=
 ```
 
 ## 🚀 Usage - `gpt4free` (WIP)
@@ -133,4 +134,5 @@ python3 gpt4free-openai-proxy/main.py
 OPENAI_API_KEY=sk-*****
 WALLET_PRIVATE_KEY=0x*****
 OPENAI_API_BASE_PATH=http://127.0.0.1:5000
+JSON_RPC_URL=
 ```

@@ -12,12 +12,12 @@ export const tools = [
     },
   }),
   new DynamicTool({
-    name: 'eth_address',
+    name: 'evm_address',
     description: 'Obtain my wallet address',
     func: async () => wallet.address,
   }),
   new DynamicTool({
-    name: 'eth_balance',
+    name: 'evm_balance',
     description: 'Obtain raw balance of any given Ethereum address',
     func: async (address: any) => {
       try {
@@ -30,7 +30,7 @@ export const tools = [
     },
   }),
   new DynamicStructuredTool({
-    name: 'eth_send',
+    name: 'evm_send',
     description:
       'Sign and Broadcast transactions using my wallet. Returns txHash after successful execution. Properties are object of to(required),value(required),nonce,gasLimit,gasPrice,data,chainId. Optional properties, including gas SHOULD be blank if unknown or unnecessary.',
     schema: z.object({
@@ -49,7 +49,7 @@ export const tools = [
     },
   }),
   new DynamicStructuredTool({
-    name: 'eth_call',
+    name: 'evm_call',
     description: 'Query the blockchain.',
     schema: z.object({
       to: z.string(),
@@ -61,7 +61,7 @@ export const tools = [
     },
   }),
   new DynamicTool({
-    name: 'eth_getTransactionReceipt',
+    name: 'evm_getTransactionReceipt',
     description: 'Returns the receipt of a transaction by transaction hash.',
     func: async (txHash: any) => {
       const receipt = await provider.getTransactionReceipt(txHash);
