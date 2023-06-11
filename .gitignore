@@ -46,3 +46,7 @@ yarn-error.log*
 
 # venv
 venv
+
+# Python
+*.pyc
+__pycache__/
