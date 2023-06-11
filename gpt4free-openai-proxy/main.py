@@ -17,7 +17,7 @@ def index():
 
 
 @app.route('/completions', methods=['GET', 'POST'])
-def api():
+def completions():
     # Get the data from the POST request.
     data = request.get_json(force=True)
     prompt = data['prompt']
@@ -39,6 +39,50 @@ def api():
             "choices": [
                 {
                     "text": result,
+                    "finish_reason": "stop",
+                    "index": 0
+                }
+            ]
+        }
+    except Exception as e:
+        return "Error: " + str(e)
+
+    if (data['stream'] == True):
+        def generator():
+            yield json.dumps(res, ensure_ascii=False)
+        resp = Response(stream_with_context(generator()),
+                        status=200, content_type='application/json')
+        return resp
+    else:
+        return json.dumps(res, ensure_ascii=False)
+
+
+@app.route('/chat/completions', methods=['GET', 'POST'])
+def chat_completions():
+    # Get the data from the POST request.
+    data = request.get_json(force=True)
+    messages = data['messages']
+    res = {}
+
+    try:
+        result = gpt4free.Completion.create(Provider.You, prompt=messages)
+        print(result)
+        res = {
+            "id": "chatcmpl-abc123",
+            "object": "chat.completion",
+            "created": 1677858242,
+            "model": data['model'],
+            "usage": {
+                "prompt_tokens": 0,
+                "completion_tokens": 0,
+                "total_tokens": 0
+            },
+            "choices": [
+                {
+                    "message": {
+                        "role": "assistant",
+                        "content": result,
+                    },
                     "finish_reason": "stop",
                     "index": 0
                 }
