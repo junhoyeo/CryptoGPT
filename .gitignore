@@ -43,3 +43,6 @@ yarn-error.log*
 
 # turbo
 .turbo
+
+# venv
+venv
