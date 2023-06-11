@@ -12,7 +12,8 @@ const store = new InMemoryFileStore();
 
 export const run = async () => {
   // const vectorStore = new MemoryVectorStore(new OpenAIEmbeddings());
-  const model = new OpenAI({ temperature: 0, openAIApiKey : process.env.OPENAI_API_KEY });
+  const model = new OpenAI({
+    temperature: 0, openAIApiKey : process.env.OPENAI_API_KEY });
 
   // random wallet
   const provider = new JsonRpcProvider('https://public-en-baobab.klaytn.net')
@@ -22,16 +23,7 @@ export const run = async () => {
   console.log(wallet.address)
   // console.log(wallet.privateKey)
 
-  // stop until user input
- await new Promise((resolve) => {
-    process.stdin.once("data", (data) => {
-      resolve(data.toString().trim());
-    });
-  });
-
   const tools = [
-  //   new ReadFileTool({ store }),
-  // new WriteFileTool({ store }),
     new DynamicTool({
       name: "eth.address",
       description:
