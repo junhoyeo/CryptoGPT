@@ -1,36 +1,15 @@
-import { ChatOpenAI } from 'langchain/chat_models/openai';
-import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
-import { AutoGPT } from 'langchain/experimental/autogpt';
-import { MemoryVectorStore } from 'langchain/vectorstores/memory';
-import { OutputParser } from './output-parser';
-import { tools } from './tools';
+import { createCryptoGPTAgent } from './agent';
+import { Config } from './config';
 
-const vectorStore = new MemoryVectorStore(new OpenAIEmbeddings());
-const outputParser = new OutputParser();
-
-export const run = async () => {
-  const autogpt = AutoGPT.fromLLMAndTools(
-    new ChatOpenAI(
-      { temperature: 0, openAIApiKey: process.env.OPENAI_API_KEY },
-      { basePath: process.env.OPENAI_API_BASE_PATH },
-    ),
-    tools,
-    {
-      memory: vectorStore.asRetriever(),
-      outputParser: outputParser,
-      aiName: 'CryptoGPT',
-      aiRole: 'Assistant',
-    },
-  );
-
+export const runAgent = async (config: Config) => {
+  const cryptoGPT = createCryptoGPTAgent(config);
   const input = `Send zero value transaction to your wallet address with your wallet. Check wallet address is correct. And print that transaction's hash`;
   console.log(`Executing with input "${input}"...`);
 
   try {
-    const result = await autogpt.run([input]);
+    const result = await cryptoGPT.run([input]);
     console.log(`Got output ${result}`);
   } catch (e) {
     console.log(e);
   }
 };
-run();
