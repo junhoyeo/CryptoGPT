@@ -3,14 +3,17 @@ import { OpenAI } from 'langchain/llms/openai';
 import { tools } from './tools';
 import { wallet } from './wallet';
 
-require('dotenv').config();
-
 export const run = async () => {
-  const model = new OpenAI({
-    temperature: 0,
-    openAIApiKey: process.env.OPENAI_API_KEY,
-    verbose: true,
-  });
+  const model = new OpenAI(
+    {
+      temperature: 0,
+      openAIApiKey: process.env.OPENAI_API_KEY,
+      verbose: true,
+    },
+    {
+      basePath: 'http://127.0.0.1:5000',
+    },
+  );
   console.log({ wallet: wallet.address });
 
   const executor = PlanAndExecuteAgentExecutor.fromLLMAndTools({
