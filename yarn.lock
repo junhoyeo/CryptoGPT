@@ -497,9 +497,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@junhoyeo/crypto-gpt-interface@workspace:interface":
+"@junhoyeo/cryptogpt-interface@workspace:interface":
   version: 0.0.0-use.local
-  resolution: "@junhoyeo/crypto-gpt-interface@workspace:interface"
+  resolution: "@junhoyeo/cryptogpt-interface@workspace:interface"
   dependencies:
     "@emotion/react": ^11.11.0
     "@emotion/styled": ^11.11.0
@@ -517,9 +517,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@junhoyeo/crypto-gpt@workspace:cryptogpt":
+"@junhoyeo/cryptogpt@workspace:cryptogpt":
   version: 0.0.0-use.local
-  resolution: "@junhoyeo/crypto-gpt@workspace:cryptogpt"
+  resolution: "@junhoyeo/cryptogpt@workspace:cryptogpt"
   dependencies:
     "@types/node": ^20.3.0
     dotenv: ^16.1.4
@@ -1197,9 +1197,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"crypto-gpt@workspace:.":
+"cryptogpt@workspace:.":
   version: 0.0.0-use.local
-  resolution: "crypto-gpt@workspace:."
+  resolution: "cryptogpt@workspace:."
   dependencies:
     "@ianvs/prettier-plugin-sort-imports": ^4.0.2
     prettier: ^2.8.8

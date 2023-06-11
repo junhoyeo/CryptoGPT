@@ -1,8 +1,8 @@
 {
-  "name": "@junhoyeo/crypto-gpt",
+  "name": "@junhoyeo/cryptogpt",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/junhoyeo/crypto-gpt",
+  "repository": "https://github.com/junhoyeo/CryptoGPT",
   "author": "Junho Yeo <i@junho.io>",
   "license": "GPL-3.0-or-later",
   "scripts": {

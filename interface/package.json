@@ -1,8 +1,8 @@
 {
-  "name": "@junhoyeo/crypto-gpt-interface",
+  "name": "@junhoyeo/cryptogpt-interface",
   "version": "1.0.0",
   "private": true,
-  "repository": "https://github.com/junhoyeo/crypto-gpt",
+  "repository": "https://github.com/junhoyeo/CryptoGPT",
   "author": "Junho Yeo <i@junho.io>",
   "scripts": {
     "dev": "next dev",
