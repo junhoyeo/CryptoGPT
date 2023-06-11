@@ -1,82 +1,31 @@
-import { LLMChain } from 'langchain';
-// import { initializeAgentExecutorWithOptions } from 'langchain/agents';
-import {
-  LLMPlanner,
-  PlanAndExecuteAgentExecutor,
-  PlanOutputParser,
-} from 'langchain/experimental/plan_and_execute';
-import { OpenAI } from 'langchain/llms/openai';
-import {
-  ChatPromptTemplate,
-  HumanMessagePromptTemplate,
-  SystemMessagePromptTemplate,
-} from 'langchain/prompts';
+import { ChatOpenAI } from 'langchain/chat_models/openai';
+import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
+import { AutoGPT } from 'langchain/experimental/autogpt';
+import { MemoryVectorStore } from 'langchain/vectorstores/memory';
+import { OutputParser } from './output-parser';
 import { tools } from './tools';
-import { wallet } from './wallet';
+
+const vectorStore = new MemoryVectorStore(new OpenAIEmbeddings());
+const outputParser = new OutputParser();
 
 export const run = async () => {
-  const llm = new OpenAI(
+  const autogpt = AutoGPT.fromLLMAndTools(
+    new ChatOpenAI({ temperature: 0, openAIApiKey: process.env.OPENAI_API_KEY }),
+    tools,
     {
-      temperature: 0,
-      openAIApiKey: process.env.OPENAI_API_KEY,
-      verbose: true,
-      maxConcurrency: 2,
-      maxRetries: 20,
+      memory: vectorStore.asRetriever(),
+      outputParser: outputParser,
+      aiName: 'CryptoGPT',
+      aiRole: 'Assistant',
     },
-    // { basePath: 'http://127.0.0.1:5000' },
   );
-  // const llm = new HuggingFaceInference({
-  //   model: 'gpt2-large',
-  //   apiKey: process.env.HUGGINGFACEHUB_API_KEY,
-  //   temperature: 0,
-  // });
-  console.log({ wallet: wallet.address });
 
-  const PLANNER_SYSTEM_PROMPT_MESSAGE_TEMPLATE = [
-    `Understand the task, create a concise plan labeled 'Plan:', listing steps to accomplish it. Ensure accuracy and generality of steps. If the task is a question, the last step should be answering it. Finish the plan with '<END_OF_PLAN>'`,
-  ].join(' ');
-
-  // const getToolsOverview = () => {
-  //   const formattedStrings = tools.map((tool) => `'${tool.name}': ${tool.description}`);
-  //   const uniqueStrings = [...new Set(formattedStrings)];
-  //   return uniqueStrings.join('\n');
-  // };
-
-  const PLANNER_CHAT_PROMPT = /* #__PURE__ */ ChatPromptTemplate.fromPromptMessages([
-    /* #__PURE__ */ SystemMessagePromptTemplate.fromTemplate(PLANNER_SYSTEM_PROMPT_MESSAGE_TEMPLATE),
-    /* #__PURE__ */ HumanMessagePromptTemplate.fromTemplate(
-      // `Your wallet address is ${wallet.address}.\n{input}`,
-      `{input}`,
-    ),
-  ]);
-  const plannerLlmChain = new LLMChain({
-    llm,
-    prompt: PLANNER_CHAT_PROMPT,
-  });
-  const planner = new LLMPlanner(plannerLlmChain, new PlanOutputParser());
-
-  const agentExecutor = new PlanAndExecuteAgentExecutor({
-    verbose: true,
-    planner,
-    stepExecutor: PlanAndExecuteAgentExecutor.getDefaultStepExecutor({
-      llm,
-      tools,
-    }),
-  });
-  console.log('Loaded agent.');
-
-  // const agentExecutor = await initializeAgentExecutorWithOptions(tools, llm, {
-  //   agentType: 'structured-chat-zero-shot-react-description',
-  //   verbose: true,
-  //   callbacks: { handleToolEnd: console.log } as any,
-  // });
-
-  const input = `What's the txHash after sending zero value transaction to your wallet address with your wallet?`;
+  const input = `Send zero value transaction to your wallet address with your wallet. Check wallet address is correct. And print that transaction's hash`;
   console.log(`Executing with input "${input}"...`);
 
   try {
-    const result = await agentExecutor.call({ input });
-    console.log(`Got output ${result.output}`);
+    const result = await autogpt.run([input]);
+    console.log(`Got output ${result}`);
   } catch (e) {
     console.log(e);
   }
