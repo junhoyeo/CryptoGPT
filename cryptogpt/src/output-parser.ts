@@ -16,8 +16,8 @@ export class OutputParser extends AutoGPTOutputParser {
     try {
       parsed = JSON.parse(text);
     } catch (error) {
-      const preprocessedText = preprocessJsonInput(text);
       try {
+        const preprocessedText = preprocessJsonInput(text);
         parsed = JSON.parse(preprocessedText);
       } catch (error) {
         return {
