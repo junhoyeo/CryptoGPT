@@ -24,7 +24,7 @@ export const tools = [
   new DynamicStructuredTool({
     name: 'eth_send',
     description:
-      "Sign and Broadcast transactions using CryptoGPT's wallet. Returns txHash after successful execution. Properties are object of to,value,nonce,gasLimit,gasPrice,data,chainId(Omit any properties if unknown/unnecessary)",
+      "Sign and Broadcast transactions using CryptoGPT's wallet. Returns txHash after successful execution. Properties are object of to,value,nonce,gasLimit,gasPrice,data,chainId. Leave property blank if unknown or unnecessary",
     schema: z.object({
       to: z.string(),
       value: z.any().optional(),

@@ -20,7 +20,6 @@ def index():
 def api():
     # Get the data from the POST request.
     data = request.get_json(force=True)
-    print(data)
     prompt = data['prompt']
     res = {}
 
