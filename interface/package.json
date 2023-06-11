@@ -1,0 +1,30 @@
+{
+  "name": "@junhoyeo/crypto-gpt-interface",
+  "version": "1.0.0",
+  "private": true,
+  "repository": "https://github.com/junhoyeo/crypto-gpt",
+  "author": "Junho Yeo <i@junho.io>",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "emotion-reset": "^3.0.1",
+    "next": "^13.4.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-is": "^18.2.0"
+  },
+  "devDependencies": {
+    "@next/bundle-analyzer": "^13.4.4",
+    "@types/node": "^20.2.5",
+    "@types/react": "^18.2.7",
+    "@types/react-dom": "^18.2.4",
+    "next-composed-plugins": "^1.0.1",
+    "typescript": "^5.0.4"
+  }
+}

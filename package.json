@@ -10,7 +10,7 @@
   },
   "workspaces": [
     "cryptogpt",
-    "gpt4free-ts"
+    "interface"
   ],
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.0.2",
