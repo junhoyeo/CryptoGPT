@@ -20,6 +20,12 @@ type AgentEvent = {
 
 const { publicRuntimeConfig } = getNextConfig();
 
+const goals = [
+  `Retrieve your wallet address.`,
+  `Send zero value transaction to yourself.`,
+  `Check transaction receipt.`,
+];
+
 const HomePage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [events, setEvents] = useState<AgentEvent[]>([]);
@@ -40,7 +46,7 @@ const HomePage = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(config),
+      body: JSON.stringify({ goals, config }),
     });
 
     if (!response.ok) {
@@ -74,6 +80,10 @@ const HomePage = () => {
 
   return (
     <Container>
+      {goals.map((goal) => (
+        <div key={goal}>{goal}</div>
+      ))}
+
       <button disabled={loading} onClick={onClickRun}>
         Run Agent
       </button>
