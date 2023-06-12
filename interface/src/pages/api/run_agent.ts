@@ -6,7 +6,7 @@ const requestBodySchema = z
   .object({
     OPENAI_API_KEY: z.string(),
     WALLET_PRIVATE_KEY: z.string(), // FIXME: This should only by processed in-browser
-    OPENAI_API_BASE_PATH: z.string(),
+    OPENAI_API_BASE_PATH: z.string().or(z.undefined()),
     JSON_RPC_URL: z.string(),
   })
   .required();

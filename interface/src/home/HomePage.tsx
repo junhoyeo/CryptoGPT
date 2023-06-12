@@ -1,5 +1,8 @@
 import styled from '@emotion/styled';
+import { Config } from '@junhoyeo/cryptogpt';
+import getNextConfig from 'next/config';
 import React, { useCallback, useState } from 'react';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 type AgentEvent = {
   thoughts: {
@@ -15,16 +18,30 @@ type AgentEvent = {
   };
 };
 
+const { publicRuntimeConfig } = getNextConfig();
+
 const HomePage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [events, setEvents] = useState<AgentEvent[]>([]);
+  const [config, setConfig] = useLocalStorage<Config>('@config', {
+    OPENAI_API_KEY: publicRuntimeConfig.OPENAI_API_KEY,
+    JSON_RPC_URL: publicRuntimeConfig.JSON_RPC_URL,
+    WALLET_PRIVATE_KEY: publicRuntimeConfig.WALLET_PRIVATE_KEY,
+  });
 
   const onClickRun = useCallback(async () => {
     if (loading) {
       return;
     }
     setLoading(true);
-    const response = await fetch('/api/run_agent');
+
+    const response = await fetch('/api/run_agent', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(config),
+    });
 
     if (!response.ok) {
       setLoading(false);
