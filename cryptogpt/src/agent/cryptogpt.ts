@@ -1,12 +1,24 @@
-import { LLMChain } from 'langchain';
+import { LLMChain } from 'langchain/chains';
 import { BaseChatModel } from 'langchain/chat_models/base';
-import { getEmbeddingContextSize, getModelContextSize } from 'langchain/dist/base_language/count_tokens';
-import { FINISH_NAME, ObjectTool } from 'langchain/dist/experimental/autogpt/schema';
+// import { getEmbeddingContextSize, getModelContextSize } from 'langchain/dist/base_language/count_tokens';
+// import { FINISH_NAME, ObjectTool } from 'langchain/dist/experimental/autogpt/schema';
 import { AutoGPTOutputParser, AutoGPTPrompt } from 'langchain/experimental/autogpt';
 import { AIChatMessage, BaseChatMessage, HumanChatMessage, SystemChatMessage } from 'langchain/schema';
 import { TokenTextSplitter } from 'langchain/text_splitter';
-import { Tool } from 'langchain/tools';
+import { StructuredTool, Tool } from 'langchain/tools';
 import { VectorStoreRetriever } from 'langchain/vectorstores/base';
+import { NextApiResponse } from 'next';
+import { getEmbeddingContextSize, getModelContextSize } from './tokens';
+
+export type ObjectTool = StructuredTool;
+
+export const FINISH_NAME = 'finish';
+
+export interface AutoGPTAction {
+  name: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  args: Record<string, any>;
+}
 
 export interface AutoGPTInput {
   aiName: string;
@@ -39,6 +51,8 @@ export class AutoGPT {
   // Currently not generic enough to support any text splitter.
   textSplitter: TokenTextSplitter;
 
+  res?: NextApiResponse;
+
   constructor({
     aiName,
     memory,
@@ -47,10 +61,12 @@ export class AutoGPT {
     tools,
     feedbackTool,
     maxIterations,
+    res,
   }: Omit<Required<AutoGPTInput>, 'aiRole' | 'humanInTheLoop'> & {
     chain: LLMChain;
     tools: ObjectTool[];
     feedbackTool?: Tool;
+    res?: NextApiResponse;
   }) {
     this.aiName = aiName;
     this.memory = memory;
@@ -70,6 +86,7 @@ export class AutoGPT {
       chunkSize,
       chunkOverlap: Math.round(chunkSize / 10),
     });
+    this.res = res;
   }
 
   static fromLLMAndTools(
@@ -83,6 +100,7 @@ export class AutoGPT {
       // humanInTheLoop = false,
       outputParser = new AutoGPTOutputParser(),
     }: AutoGPTInput,
+    res?: NextApiResponse,
   ): AutoGPT {
     const prompt = new AutoGPTPrompt({
       aiName,
@@ -101,6 +119,7 @@ export class AutoGPT {
       tools,
       // feedbackTool,
       maxIterations,
+      res,
     });
   }
 
@@ -118,7 +137,7 @@ export class AutoGPT {
       });
 
       // Print the assistant reply
-      console.log(assistantReply);
+      this.res?.write(assistantReply);
       this.fullMessageHistory.push(new HumanChatMessage(user_input));
       this.fullMessageHistory.push(new AIChatMessage(assistantReply));
 

@@ -1,7 +1,8 @@
 {
   "name": "@junhoyeo/cryptogpt",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "repository": "https://github.com/junhoyeo/CryptoGPT",
   "author": "Junho Yeo <i@junho.io>",
   "license": "GPL-3.0-or-later",
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.3.0",
+    "next": "^13.4.5",
     "tsc-alias": "^1.8.6",
     "typescript": "^5.1.3"
   }
