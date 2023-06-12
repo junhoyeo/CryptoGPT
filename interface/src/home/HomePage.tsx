@@ -31,7 +31,10 @@ const HomePage = () => {
       throw Error(response.status.toString());
     }
 
-    for (const reader = response.body.getReader(); ; ) {
+    for (const reader = response.body?.getReader(); ; ) {
+      if (!reader) {
+        break;
+      }
       const { value, done } = await reader.read();
 
       if (done) {
