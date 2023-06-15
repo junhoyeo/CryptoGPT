@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Config } from '@junhoyeo/cryptogpt';
+import { CheckCircle, Zap } from 'lucide-react';
 import getNextConfig from 'next/config';
 import React, { useCallback, useState } from 'react';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
@@ -12,10 +13,22 @@ type AgentEvent = {
     criticism: string;
     speak: string;
   };
-  command: {
-    name: string;
-    args: any;
-  };
+  command:
+    | { name: 'evm_address' }
+    | {
+        name: 'evm_send';
+        args: {
+          to: string;
+          value: string;
+          nonce?: string;
+          data?: string;
+          gasLimit?: string;
+          gasPrice?: string;
+          chainId?: string;
+        };
+      }
+    | { name: 'evm_getTransactionReceipt'; args: { input: string } }
+    | { name: 'finish'; args: { response: string } };
 };
 
 const { publicRuntimeConfig } = getNextConfig();
@@ -58,8 +71,8 @@ const HomePage = () => {
       if (!reader) {
         break;
       }
-      const { value, done } = await reader.read();
 
+      let { value, done } = await reader.read();
       if (done) {
         break;
       }
@@ -68,6 +81,10 @@ const HomePage = () => {
         const decodedValue = new TextDecoder().decode(value);
         const event = JSON.parse(decodedValue);
         setEvents((events) => [...events, event]);
+
+        if (event?.command?.name === 'finish') {
+          break;
+        }
       } catch (error) {
         console.error(error);
       }
@@ -79,22 +96,45 @@ const HomePage = () => {
   console.log(events);
 
   return (
-    <Container>
-      {goals.map((goal) => (
-        <div key={goal}>{goal}</div>
-      ))}
+    <div className="w-full bg-slate-50">
+      <Container className="min-h-screen h-full container mx-auto max-w-xl bg-white pb-10">
+        {goals.map((goal) => (
+          <div key={goal}>{goal}</div>
+        ))}
 
-      <button disabled={loading} onClick={onClickRun}>
-        Run Agent
-      </button>
+        <button disabled={loading} onClick={onClickRun}>
+          Run Agent
+        </button>
 
-      {events.map((event, index) => (
-        <div key={index}>
-          {event.thoughts.speak}
-          <div style={{ backgroundColor: 'greenyellow' }}>{JSON.stringify(event.command)}</div>
+        <div className="flex flex-col gap-3">
+          {events.map((event, index) => (
+            <div
+              key={index}
+              className="flex flex-col bg-slate-100 w-fit max-w-[70%] py-3 px-4 rounded-xl rounded-tl-none"
+            >
+              {event?.command?.name === 'finish' ? (
+                <span className="flex items-center gap-1 text-slate-700 text-xs">
+                  <CheckCircle size={14} /> <span className="font-medium">Finish</span>
+                </span>
+              ) : (
+                <span className="flex items-center gap-1 text-slate-700 text-xs">
+                  <Zap size={14} /> <span className="font-medium">Thought</span>
+                </span>
+              )}
+
+              <div className="mt-2">
+                <p className="leading-snug text-sm">{event.thoughts.reasoning}</p>
+                {event?.command?.name !== 'finish' && (
+                  <div style={{ backgroundColor: 'greenyellow' }}>
+                    <span>{event.command.name}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
-    </Container>
+      </Container>
+    </div>
   );
 };
 

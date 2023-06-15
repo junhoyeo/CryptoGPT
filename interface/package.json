@@ -15,7 +15,7 @@
     "@emotion/styled": "^11.11.0",
     "@junhoyeo/cryptogpt": "workspace:^",
     "axios": "^1.4.0",
-    "emotion-reset": "^3.0.1",
+    "lucide-react": "^0.244.0",
     "next": "^13.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -27,8 +27,11 @@
     "@types/node": "^20.2.5",
     "@types/react": "^18.2.7",
     "@types/react-dom": "^18.2.4",
+    "autoprefixer": "^10.4.14",
     "find-yarn-workspace-root": "^2.0.0",
     "next-composed-plugins": "^1.0.1",
+    "postcss": "^8.4.24",
+    "tailwindcss": "^3.3.2",
     "typescript": "^5.0.4"
   }
 }
