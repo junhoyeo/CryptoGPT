@@ -137,7 +137,7 @@ export class AutoGPT {
       });
 
       // Print the assistant reply
-      this.res?.write(assistantReply);
+      this.res?.write(JSON.stringify({ type: 'agent', text: assistantReply }));
       this.fullMessageHistory.push(new HumanChatMessage(user_input));
       this.fullMessageHistory.push(new AIChatMessage(assistantReply));
 
@@ -155,8 +155,12 @@ export class AutoGPT {
         let observation;
         try {
           observation = await tool.call(action.args);
+          this.res?.write(JSON.stringify({ type: 'tool', error: false, text: observation }));
         } catch (e) {
           observation = `Error in args: ${e}`;
+          this.res?.write(
+            JSON.stringify({ type: 'tool', error: true, text: (e as Error | undefined)?.message }),
+          );
         }
         result = `Command ${tool.name} returned: ${observation}`;
       } else if (action.name === 'ERROR') {
