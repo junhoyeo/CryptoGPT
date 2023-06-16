@@ -37,14 +37,3 @@ export type ParsedAgentEvent =
       error: false;
       observation: any;
     };
-
-export type StreamedAgentEvent =
-  | {
-      type: 'agent';
-      text: string;
-    }
-  | {
-      type: 'tool';
-      error: boolean;
-      text: string | undefined;
-    };

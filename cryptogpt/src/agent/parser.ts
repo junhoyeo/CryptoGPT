@@ -30,6 +30,7 @@ export class OutputParser extends AutoGPTOutputParser {
       return {
         name: parsed.command.name,
         args: parsed.command.args,
+        parsed,
       };
     } catch (error) {
       return {

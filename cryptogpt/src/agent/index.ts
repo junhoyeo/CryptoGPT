@@ -17,7 +17,11 @@ export const createCryptoGPTAgent = (config: Config, res?: NextApiResponse) => {
   );
   return AutoGPT.fromLLMAndTools(
     new ChatOpenAI(
-      { temperature: 0, openAIApiKey: config.OPENAI_API_KEY },
+      {
+        // modelName: 'gpt-4-0613',
+        temperature: 0,
+        openAIApiKey: config.OPENAI_API_KEY,
+      },
       { basePath: config.OPENAI_API_BASE_PATH },
     ),
     createCryptoGPTTools(config),

@@ -5,7 +5,7 @@ import getNextConfig from 'next/config';
 import React, { useCallback, useState } from 'react';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { AgentMessage } from './AgentMessage';
-import { ParsedAgentEvent, StreamedAgentEvent } from './types';
+import { ParsedAgentEvent } from './types';
 
 const { publicRuntimeConfig } = getNextConfig();
 
@@ -21,7 +21,7 @@ const HomePage = () => {
     WALLET_PRIVATE_KEY: publicRuntimeConfig.WALLET_PRIVATE_KEY,
   });
 
-  const [draft, setDraft] = useState<string>('');
+  const [draft, setDraft] = useState<string>('Send zero value transaction to yourself.');
 
   const onClickRun = useCallback(async () => {
     if (loading) {
@@ -54,16 +54,20 @@ const HomePage = () => {
 
       try {
         const decodedValue = new TextDecoder().decode(value);
-        const streamedEvent: StreamedAgentEvent = JSON.parse(decodedValue);
+        console.log([decodedValue]);
 
-        const event: ParsedAgentEvent =
-          streamedEvent.type === 'agent'
-            ? { ...streamedEvent, ...JSON.parse(streamedEvent.text) }
-            : streamedEvent;
+        const jsonls = decodedValue.split('\n');
+        const decodedEvents = jsonls.flatMap((line) => {
+          if (!line) {
+            return [];
+          }
+          const event: ParsedAgentEvent = JSON.parse(line);
+          return event;
+        });
 
-        setEvents((events) => [...events, event]);
+        setEvents((events) => [...events, ...decodedEvents]);
 
-        if (event.type === 'agent' && event?.command?.name === 'finish') {
+        if (decodedEvents.some((event) => event.type === 'agent' && event?.command?.name === 'finish')) {
           break;
         }
       } catch (error) {
