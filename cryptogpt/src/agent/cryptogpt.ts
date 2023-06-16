@@ -8,6 +8,7 @@ import { TokenTextSplitter } from 'langchain/text_splitter';
 import { StructuredTool, Tool } from 'langchain/tools';
 import { VectorStoreRetriever } from 'langchain/vectorstores/base';
 import { NextApiResponse } from 'next';
+import { v4 as uuidv4 } from 'uuid';
 import { OutputParser } from './parser';
 import { getEmbeddingContextSize, getModelContextSize } from './tokens';
 
@@ -143,7 +144,9 @@ export class AutoGPT {
 
       const action = await this.outputParser.parse(assistantReply);
       console.log(action, JSON.stringify(action));
-      this.res?.write(JSON.stringify({ type: 'agent', ...action.parsed }) + '\n');
+
+      const streamId = uuidv4();
+      this.res?.write(JSON.stringify({ id: streamId, type: 'agent', ...action.parsed }) + '\n');
 
       const tools = this.tools.reduce(
         (acc, tool) => ({ ...acc, [tool.name]: tool }),
@@ -158,11 +161,18 @@ export class AutoGPT {
         let observation;
         try {
           observation = await tool.call(action.args);
-          this.res?.write(JSON.stringify({ type: 'tool', error: false, text: observation }) + '\n');
+          this.res?.write(
+            JSON.stringify({ id: streamId, type: 'tool', error: false, text: observation }) + '\n',
+          );
         } catch (e) {
           observation = `Error in args: ${e}`;
           this.res?.write(
-            JSON.stringify({ type: 'tool', error: true, text: (e as Error | undefined)?.message }) + '\n',
+            JSON.stringify({
+              id: streamId,
+              type: 'tool',
+              error: true,
+              text: (e as Error | undefined)?.message,
+            }) + '\n',
           );
         }
         result = `Command ${tool.name} returned: ${observation}`;

@@ -54,7 +54,6 @@ const HomePage = () => {
 
       try {
         const decodedValue = new TextDecoder().decode(value);
-        console.log([decodedValue]);
 
         const jsonls = decodedValue.split('\n');
         const decodedEvents = jsonls.flatMap((line) => {
@@ -84,11 +83,14 @@ const HomePage = () => {
     <div className="w-full bg-slate-50">
       <Container className="container h-full max-w-xl min-h-screen pt-5 pb-10 mx-auto bg-white">
         <div className="flex flex-col gap-3">
-          {events.map((event, index) =>
+          {events.map((event) =>
             event.type === 'agent' ? (
-              <AgentMessage key={index} event={event} />
+              <AgentMessage key={event.id} event={event} />
             ) : event.type === 'tool' ? (
-              <div className="flex flex-col bg-slate-100 w-fit max-w-[80%] py-3 pb-4 px-4 rounded-xl rounded-tl-none">
+              <div
+                key={event.id}
+                className="flex flex-col bg-slate-100 w-fit max-w-[80%] py-3 pb-4 px-4 rounded-xl rounded-tl-none"
+              >
                 <span className="flex items-center gap-1 text-xs text-slate-700">
                   <Wrench size={14} /> <span className="font-medium">Tool</span>
                 </span>

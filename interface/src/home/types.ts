@@ -1,4 +1,5 @@
 export type AgentEvent = {
+  id: string;
   type: 'agent';
   thoughts: {
     text: string;
@@ -28,11 +29,13 @@ export type AgentEvent = {
 export type ParsedAgentEvent =
   | AgentEvent
   | {
+      id: string;
       type: 'tool';
       error: true;
       message: string | undefined;
     }
   | {
+      id: string;
       type: 'tool';
       error: false;
       observation: any;
