@@ -142,10 +142,11 @@ const HomePage = () => {
             className="flex w-full h-10 px-3 py-2 text-sm bg-transparent border rounded-md border-input placeholder:text-muted-foreground focus-visible:outline-none focus:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
+            disabled={loading}
           />
 
           <button
-            className="px-4 py-3 text-sm rounded-lg bg-slate-700 text-slate-200 disabled:bg-slate-400"
+            className="px-4 py-3 text-sm rounded-lg bg-slate-700 text-slate-200 disabled:bg-slate-400 disabled:cursor-not-allowed"
             disabled={loading}
             onClick={onClickRun}
           >
