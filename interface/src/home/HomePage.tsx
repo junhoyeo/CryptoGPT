@@ -7,6 +7,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Input } from '@/components/Input';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { shortenAddress } from '@/utils/address';
 import { AgentMessage } from './components/AgentMessage';
 import { GoalMessage } from './components/GoalMessage';
 import { ThinkingMessage } from './components/ThinkingMessage';
@@ -140,9 +141,29 @@ const HomePage = () => {
     <div className="w-full bg-slate-50">
       <Container
         ref={containerRef}
-        className="container h-full max-w-xl min-h-screen pt-8 pb-10 mx-auto bg-white"
+        className="container h-full max-w-2xl min-h-screen pt-8 pb-10 mx-auto bg-white"
       >
         <div className="flex flex-col gap-3">
+          {events.length === 0 && (
+            <div className="flex flex-col items-center w-full gap-3 my-6">
+              <img src="/assets/cryptogpt-logo.svg" className="w-72" />
+              <p className="inline-block max-w-[400px] leading-relaxed text-lg text-center text-slate-900">
+                An experiment by{' '}
+                <a href="https://github.com/junhoyeo" target="_blank">
+                  <Badge className="hover:bg-slate-200">🏴‍☠️ @junhoyeo</Badge>
+                </a>{' '}
+                <br /> for <Badge>🤖 LLMs</Badge> archiving <Badge>🏦 Financial Autonomy</Badge>
+              </p>
+              <ul className="flex w-full gap-2 mt-4">
+                <Box>Send zero value transaction to yourself.</Box>
+                <Box>
+                  Wrap <TokenLogo src="/assets/eth.png" /> 1 ETH with <TokenLogo src="/assets/weth.png" />{' '}
+                  WETH deployed in <code>{shortenAddress('0x043c471bEe060e00A56CcD02c0Ca286808a5A436')}</code>
+                  . ABI is <code>{`{"inputs":[], "name":"deposit", "outputs":[], ...}`}</code>.
+                </Box>
+              </ul>
+            </div>
+          )}
           {events.map((event) =>
             event.type === 'goal_set' ? (
               <GoalMessage key={event.id} event={event} />
@@ -159,7 +180,7 @@ const HomePage = () => {
       </Container>
 
       <div ref={bottomBarRef} className="fixed bottom-0 left-0 right-0 w-full">
-        <GradientContainer className="flex flex-col max-w-xl gap-2 px-4 pt-8 pb-6 mx-auto">
+        <GradientContainer className="flex flex-col max-w-2xl gap-2 px-4 pt-8 pb-6 mx-auto">
           <Input
             className={clsx(
               'flex w-full h-10 px-3 py-3',
@@ -201,3 +222,48 @@ const GradientContainer = styled(Container)`
     pointer-events: auto;
   }
 `;
+
+const Badge: React.FC<React.HTMLAttributes<HTMLSpanElement>> = ({ className, ...props }) => (
+  <_Badge
+    className={clsx(
+      'mx-0.5 leading-none inline-block p-1 font-medium text-base rounded bg-slate-100 text-slate-800',
+      className,
+    )}
+    {...props}
+  />
+);
+const _Badge = styled.span``;
+
+const Box: React.FC<React.HTMLAttributes<HTMLSpanElement>> = ({ className, ...props }) => (
+  <_Box
+    className={clsx(
+      'flex-1 p-3 transition-colors rounded-lg cursor-pointer bg-slate-200 text-slate-500 hover:bg-slate-300',
+      className,
+    )}
+    {...props}
+  />
+);
+const _Box = styled.li`
+  code {
+    font-size: 14px;
+    background-color: #f7fafc;
+    border-radius: 4px;
+  }
+`;
+
+type TokenLogoProps = {
+  src: string;
+};
+const TokenLogo: React.FC<TokenLogoProps> = ({ src }) => (
+  <img
+    className="inline-block"
+    src={src}
+    style={{
+      width: 16,
+      height: 16,
+      marginLeft: 3,
+      filter: 'drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.33))',
+      objectFit: 'contain',
+    }}
+  />
+);

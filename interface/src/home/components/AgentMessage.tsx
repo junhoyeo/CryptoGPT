@@ -1,14 +1,11 @@
 import clsx from 'clsx';
 import { Box, CheckCircle, Loader, XCircle, Zap } from 'lucide-react';
 import React, { useMemo } from 'react';
+import { shortenAddress } from '@/utils/address';
 import { AgentEvent } from '../types/events';
 
 const cleanObject = (params: object) =>
   Object.fromEntries(Object.entries(params).filter(([_, v]) => v !== ''));
-
-const shortenAddress = (address: string, size: number = 4) => {
-  return `${address.substring(0, 2 + size)}...${address.substring(address.length - size)}`;
-};
 
 type AgentMessageProps = {
   event: AgentEvent;

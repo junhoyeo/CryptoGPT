@@ -20,6 +20,11 @@ export const GlobalStyle: React.FC = () => (
         cursor: pointer;
       }
 
+      img {
+        user-select: none;
+        -webkit-user-drag: none;
+      }
+
       input,
       button {
         outline: 0;
