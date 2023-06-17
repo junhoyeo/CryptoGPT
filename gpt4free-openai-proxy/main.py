@@ -1,6 +1,8 @@
 from flask import Flask, request, Response, stream_with_context
 import os
 import sys
+import time
+import uuid
 import json
 
 app = Flask(__name__)
@@ -27,9 +29,9 @@ def completions():
         result = gpt4free.Completion.create(Provider.You, prompt=prompt)
         print(result)
         res = {
-            "id": "chatcmpl-abc123",
+            "id": f"chatcmpl-{uuid.uuid4()}",
             "object": "chat.completion",
-            "created": 1677858242,
+            "created": int(time.time()),
             "model": data['model'],
             "usage": {
                 "prompt_tokens": 0,
@@ -68,9 +70,9 @@ def chat_completions():
         result = gpt4free.Completion.create(Provider.You, prompt=messages)
         print(result)
         res = {
-            "id": "chatcmpl-abc123",
+            "id": f"chatcmpl-{uuid.uuid4()}",
             "object": "chat.completion",
-            "created": 1677858242,
+            "created": int(time.time()),
             "model": data['model'],
             "usage": {
                 "prompt_tokens": 0,
