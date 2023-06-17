@@ -157,9 +157,32 @@ const HomePage = () => {
               <ul className="flex w-full gap-2 mt-4">
                 <Box>Send zero value transaction to yourself.</Box>
                 <Box>
-                  Wrap <TokenLogo src="/assets/eth.png" /> 1 ETH with <TokenLogo src="/assets/weth.png" />{' '}
-                  WETH deployed in <code>{shortenAddress('0x043c471bEe060e00A56CcD02c0Ca286808a5A436')}</code>
-                  . ABI is <code>{`{"inputs":[], "name":"deposit", "outputs":[], ...}`}</code>.
+                  Wrap{' '}
+                  <span className="inline-block">
+                    <TokenLogo src="/assets/eth.png" /> 1 ETH
+                  </span>{' '}
+                  with{' '}
+                  <span className="inline-block">
+                    <TokenLogo src="/assets/weth.png" /> WETH
+                  </span>{' '}
+                  deployed in <code>{shortenAddress('0x043c471bEe060e00A56CcD02c0Ca286808a5A436')}</code>. ABI
+                  is <code>{`{"inputs":[], "name":"deposit", "outputs":[], ...}`}</code>.
+                </Box>
+                <Box>
+                  Swap{' '}
+                  <span className="inline-block">
+                    <TokenLogo src="/assets/eth.png" /> 0.1 ETH
+                  </span>{' '}
+                  to{' '}
+                  <span className="inline-block">
+                    <TokenLogo src="/assets/matic.png" className="rounded-full" /> MATIC
+                  </span>{' '}
+                  with{' '}
+                  <span className="inline-block">
+                    <TokenLogo src="/assets/uni.png" className="bg-white rounded-full" /> UniswapRouterV2
+                  </span>{' '}
+                  deployed in <code>{shortenAddress('0xAbc12345Def67890FEdcBa09876E543210FeDcBa')}</code>.
+                  {/* FIXME: Change fake address lol */}
                 </Box>
               </ul>
             </div>
@@ -251,12 +274,12 @@ const _Box = styled.li`
   }
 `;
 
-type TokenLogoProps = {
+type TokenLogoProps = React.HTMLAttributes<HTMLImageElement> & {
   src: string;
 };
-const TokenLogo: React.FC<TokenLogoProps> = ({ src }) => (
+const TokenLogo: React.FC<TokenLogoProps> = ({ src, className, style, ...props }) => (
   <img
-    className="inline-block"
+    className={clsx('inline-block', className)}
     src={src}
     style={{
       width: 16,
@@ -264,6 +287,8 @@ const TokenLogo: React.FC<TokenLogoProps> = ({ src }) => (
       marginLeft: 3,
       filter: 'drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.33))',
       objectFit: 'contain',
+      ...style,
     }}
+    {...props}
   />
 );
