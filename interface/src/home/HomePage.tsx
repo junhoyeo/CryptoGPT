@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
 import { Config } from '@junhoyeo/cryptogpt';
-import { Box, CheckCircle, Wrench, Zap } from 'lucide-react';
+import { Wrench } from 'lucide-react';
 import getNextConfig from 'next/config';
 import React, { useCallback, useState } from 'react';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { AgentMessage } from './AgentMessage';
-import { ParsedAgentEvent } from './types';
+import { AgentEvent, ParsedAgentEvent } from './types';
 
 const { publicRuntimeConfig } = getNextConfig();
 
@@ -28,6 +28,9 @@ const HomePage = () => {
       return;
     }
     setLoading(true);
+
+    // add thinking
+    events.push({ id: 'thinking', type: 'thinking' });
 
     const response = await fetch('/api/run_agent', {
       method: 'POST',
@@ -64,10 +67,34 @@ const HomePage = () => {
           return event;
         });
 
-        setEvents((events) => [...events, ...decodedEvents]);
+        if (decodedEvents.length > 0) {
+          // remove thinking
+          setEvents((events) => events.filter((event) => event.id !== 'thinking'));
+        }
+        setEvents((events) => {
+          const newEvents = [...events];
+          for (const event of decodedEvents) {
+            if (event.type === 'tool') {
+              const foundEvent = newEvents.find((e) => e.id === event.id && e.type === 'agent') as AgentEvent;
+              if (foundEvent) {
+                foundEvent.resolved = event;
+              } else {
+                newEvents.push(event);
+              }
+            } else {
+              newEvents.push(event);
+            }
+          }
+          return newEvents;
+        });
 
         if (decodedEvents.some((event) => event.type === 'agent' && event?.command?.name === 'finish')) {
           break;
+        } else {
+          setTimeout(() => {
+            // add thinking
+            setEvents((events) => [...events, { id: 'thinking', type: 'thinking' }]);
+          }, 200);
         }
       } catch (error) {
         console.error(error);
@@ -96,6 +123,13 @@ const HomePage = () => {
                 </span>
 
                 <div className="flex flex-col gap-2 mt-2">{JSON.stringify(event)}</div>
+              </div>
+            ) : event.type === 'thinking' ? (
+              <div key={event.id} className="flex w-full gap-2">
+                <img src="/assets/agent.png" className="w-8 h-8 rounded" />
+                <div className="flex flex-col bg-slate-100 w-fit max-w-[80%] py-3 pb-4 px-4 rounded-xl rounded-tl-none">
+                  Thinking...
+                </div>
               </div>
             ) : null,
           )}

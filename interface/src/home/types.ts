@@ -1,3 +1,17 @@
+export type ToolEvent =
+  | {
+      id: string;
+      type: 'tool';
+      error: true;
+      text: string | undefined;
+    }
+  | {
+      id: string;
+      type: 'tool';
+      error: false;
+      text: string | any;
+    };
+
 export type AgentEvent = {
   id: string;
   type: 'agent';
@@ -24,19 +38,7 @@ export type AgentEvent = {
       }
     | { name: 'evm_getTransactionReceipt'; args: { input: string } }
     | { name: 'finish'; args: { response: string } };
+  resolved?: ToolEvent;
 };
 
-export type ParsedAgentEvent =
-  | AgentEvent
-  | {
-      id: string;
-      type: 'tool';
-      error: true;
-      message: string | undefined;
-    }
-  | {
-      id: string;
-      type: 'tool';
-      error: false;
-      observation: any;
-    };
+export type ParsedAgentEvent = AgentEvent | ToolEvent | { id: string; type: 'thinking' };
