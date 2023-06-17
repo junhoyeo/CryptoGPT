@@ -1,18 +1,18 @@
 import { LLMChain } from 'langchain/chains';
 import { BaseChatModel } from 'langchain/chat_models/base';
-// import { getEmbeddingContextSize, getModelContextSize } from 'langchain/dist/base_language/count_tokens';
-// import { FINISH_NAME, ObjectTool } from 'langchain/dist/experimental/autogpt/schema';
-import { AutoGPTOutputParser, AutoGPTPrompt } from 'langchain/experimental/autogpt';
+import { AutoGPTPrompt } from 'langchain/experimental/autogpt';
 import { AIChatMessage, BaseChatMessage, HumanChatMessage, SystemChatMessage } from 'langchain/schema';
 import { TokenTextSplitter } from 'langchain/text_splitter';
 import { StructuredTool, Tool } from 'langchain/tools';
 import { VectorStoreRetriever } from 'langchain/vectorstores/base';
-import { NextApiResponse } from 'next';
 import { v4 as uuidv4 } from 'uuid';
 import { OutputParser } from './parser';
 import { getEmbeddingContextSize, getModelContextSize } from './tokens';
 
 export type ObjectTool = StructuredTool;
+export type Stream = {
+  write: (chunk: string) => void;
+};
 
 export const FINISH_NAME = 'finish';
 
@@ -53,7 +53,7 @@ export class AutoGPT {
   // Currently not generic enough to support any text splitter.
   textSplitter: TokenTextSplitter;
 
-  res?: NextApiResponse;
+  stream?: Stream;
 
   constructor({
     aiName,
@@ -63,12 +63,12 @@ export class AutoGPT {
     tools,
     feedbackTool,
     maxIterations,
-    res,
+    stream,
   }: Omit<Required<AutoGPTInput>, 'aiRole' | 'humanInTheLoop'> & {
     chain: LLMChain;
     tools: ObjectTool[];
     feedbackTool?: Tool;
-    res?: NextApiResponse;
+    stream?: Stream;
   }) {
     this.aiName = aiName;
     this.memory = memory;
@@ -88,7 +88,7 @@ export class AutoGPT {
       chunkSize,
       chunkOverlap: Math.round(chunkSize / 10),
     });
-    this.res = res;
+    this.stream = stream;
   }
 
   static fromLLMAndTools(
@@ -101,8 +101,8 @@ export class AutoGPT {
       maxIterations = 100,
       // humanInTheLoop = false,
       outputParser = new OutputParser(),
-    }: AutoGPTInput,
-    res?: NextApiResponse,
+      stream,
+    }: AutoGPTInput & { stream?: Stream },
   ): AutoGPT {
     const prompt = new AutoGPTPrompt({
       aiName,
@@ -121,7 +121,7 @@ export class AutoGPT {
       tools,
       // feedbackTool,
       maxIterations,
-      res,
+      stream,
     });
   }
 
@@ -146,7 +146,7 @@ export class AutoGPT {
       console.log(action, JSON.stringify(action));
 
       const streamId = uuidv4();
-      this.res?.write(
+      this.stream?.write(
         JSON.stringify({
           id: streamId,
           type: 'agent',
@@ -169,12 +169,12 @@ export class AutoGPT {
         let observation;
         try {
           observation = await tool.call(action.args);
-          this.res?.write(
+          this.stream?.write(
             JSON.stringify({ id: streamId, type: 'tool', error: false, text: observation }) + '\n',
           );
         } catch (e) {
           observation = `Error in args: ${e}`;
-          this.res?.write(
+          this.stream?.write(
             JSON.stringify({
               id: streamId,
               type: 'tool',

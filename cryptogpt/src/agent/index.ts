@@ -30,8 +30,8 @@ export const createCryptoGPTAgent = (config: Config, res?: NextApiResponse) => {
       outputParser: outputParser,
       aiName: 'CryptoGPT',
       aiRole: 'Assistant',
+      stream: res,
     },
-    res,
   );
 };
 
