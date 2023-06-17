@@ -41,4 +41,9 @@ export type AgentEvent = {
   resolved?: ToolEvent;
 } & ({ error: true; reason: string } | { error: false });
 
-export type ParsedAgentEvent = AgentEvent | ToolEvent | { id: string; type: 'thinking' };
+export type ThinkingEvent = {
+  id: string;
+  type: 'thinking';
+};
+
+export type ParsedAgentEvent = AgentEvent | ToolEvent | ThinkingEvent;

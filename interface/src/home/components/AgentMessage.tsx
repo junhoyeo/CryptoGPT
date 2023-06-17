@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { Box, CheckCircle, Loader, XCircle, Zap } from 'lucide-react';
 import React, { useMemo } from 'react';
-import { AgentEvent } from './types';
+import { AgentEvent } from '../types/events';
 
 const cleanObject = (params: object) =>
   Object.fromEntries(Object.entries(params).filter(([_, v]) => v !== ''));

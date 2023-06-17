@@ -1,12 +1,13 @@
 import styled from '@emotion/styled';
 import { Config } from '@junhoyeo/cryptogpt';
-import { Loader, Wrench } from 'lucide-react';
 import getNextConfig from 'next/config';
 import React, { useCallback, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
-import { AgentMessage } from './AgentMessage';
-import { AgentEvent, ParsedAgentEvent } from './types';
+import { AgentMessage } from './components/AgentMessage';
+import { ThinkingMessage } from './components/ThinkingMessage';
+import { ToolMessage } from './components/ToolMessage';
+import { AgentEvent, ParsedAgentEvent } from './types/events';
 
 const { publicRuntimeConfig } = getNextConfig();
 
@@ -115,26 +116,10 @@ const HomePage = () => {
             event.type === 'agent' ? (
               <AgentMessage key={event.id} event={event} />
             ) : event.type === 'tool' ? (
-              <div
-                key={event.id}
-                className="flex flex-col bg-slate-100 w-fit max-w-[80%] py-3 pb-4 px-4 rounded-xl rounded-tl-none"
-              >
-                <span className="flex items-center gap-1 text-xs text-slate-700">
-                  <Wrench size={14} /> <span className="font-medium">Tool</span>
-                </span>
-
-                <div className="flex flex-col gap-2 mt-2">{JSON.stringify(event)}</div>
-              </div>
+              // FIXME: Deprecated
+              <ToolMessage key={event.id} event={event} />
             ) : event.type === 'thinking' ? (
-              <div key={event.id} className="flex w-full gap-2">
-                <img src="/assets/agent.png" className="w-8 h-8 rounded" />
-                <div className="flex flex-col bg-slate-100 w-fit max-w-[80%] py-3 px-4 rounded-xl rounded-tl-none">
-                  <span className="flex items-center gap-1 text-xs text-slate-700">
-                    <Loader size={14} className="animate-spin" />{' '}
-                    <span className="font-medium">Thinking...</span>
-                  </span>
-                </div>
-              </div>
+              <ThinkingMessage key={event.id} />
             ) : null,
           )}
 
