@@ -46,4 +46,11 @@ export type ThinkingEvent = {
   type: 'thinking';
 };
 
+export type GoalSetEvent = {
+  id: string;
+  type: 'goal_set';
+  goal: string;
+};
+
 export type ParsedAgentEvent = AgentEvent | ToolEvent | ThinkingEvent;
+export type CryptoGPTEvent = AgentEvent | ToolEvent | ThinkingEvent | GoalSetEvent;

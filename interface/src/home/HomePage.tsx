@@ -1,16 +1,16 @@
 import styled from '@emotion/styled';
 import { Config } from '@junhoyeo/cryptogpt';
 import clsx from 'clsx';
-import { Sparkles } from 'lucide-react';
 import getNextConfig from 'next/config';
 import React, { useCallback, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Input } from '@/components/Input';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { AgentMessage } from './components/AgentMessage';
+import { GoalMessage } from './components/GoalMessage';
 import { ThinkingMessage } from './components/ThinkingMessage';
 import { ToolMessage } from './components/ToolMessage';
-import { AgentEvent, ParsedAgentEvent } from './types/events';
+import { AgentEvent, CryptoGPTEvent, ParsedAgentEvent } from './types/events';
 
 const { publicRuntimeConfig } = getNextConfig();
 
@@ -19,7 +19,7 @@ const LAST_GOAL = `Finish.`;
 
 const HomePage = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [events, setEvents] = useState<ParsedAgentEvent[]>([]);
+  const [events, setEvents] = useState<CryptoGPTEvent[]>([]);
   const [config, setConfig] = useLocalStorage<Config>('@config', {
     OPENAI_API_KEY: publicRuntimeConfig.OPENAI_API_KEY,
     JSON_RPC_URL: publicRuntimeConfig.JSON_RPC_URL,
@@ -33,6 +33,9 @@ const HomePage = () => {
       return;
     }
     setLoading(true);
+
+    // show goal
+    events.push({ id: uuidv4(), type: 'goal_set', goal: draft });
 
     // add thinking
     events.push({ id: uuidv4(), type: 'thinking' });
@@ -115,19 +118,10 @@ const HomePage = () => {
     <div className="w-full bg-slate-50">
       <Container className="container h-full max-w-xl min-h-screen pt-5 pb-10 mx-auto bg-white">
         <div className="flex flex-col gap-3">
-          {draft && loading && (
-            <div className="flex w-full gap-2">
-              <div className="flex flex-col w-fit ml-auto max-w-[80%] py-3 px-4 rounded-xl rounded-tr-none bg-slate-800 text-slate-50">
-                <span className="flex items-center gap-1 text-xs text-slate-300">
-                  <Sparkles size={14} /> <span className="font-medium">Goal</span>
-                </span>
-
-                <p className="text-sm">{draft}</p>
-              </div>
-            </div>
-          )}
           {events.map((event) =>
-            event.type === 'agent' ? (
+            event.type === 'goal_set' ? (
+              <GoalMessage key={event.id} event={event} />
+            ) : event.type === 'agent' ? (
               <AgentMessage key={event.id} event={event} />
             ) : event.type === 'tool' ? (
               // FIXME: Deprecated
