@@ -82,7 +82,7 @@ export const AgentMessage: React.FC<AgentMessageProps> = ({ event }) => {
               {!event.resolved ? (
                 <div className="flex flex-col px-1 py-1 pt-2 mt-2 bg-yellow-200 border border-yellow-500 rounded">
                   <span className="flex items-center gap-1 text-xs leading-none text-yellow-800">
-                    <Loader size={12} /> <span className="font-medium">Loading</span>
+                    <Loader size={12} className="animate-spin" /> <span className="font-medium">Loading</span>
                   </span>
                 </div>
               ) : (

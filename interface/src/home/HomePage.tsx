@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Config } from '@junhoyeo/cryptogpt';
-import { Wrench } from 'lucide-react';
+import { Loader, Wrench } from 'lucide-react';
 import getNextConfig from 'next/config';
 import React, { useCallback, useState } from 'react';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
@@ -127,8 +127,11 @@ const HomePage = () => {
             ) : event.type === 'thinking' ? (
               <div key={event.id} className="flex w-full gap-2">
                 <img src="/assets/agent.png" className="w-8 h-8 rounded" />
-                <div className="flex flex-col bg-slate-100 w-fit max-w-[80%] py-3 pb-4 px-4 rounded-xl rounded-tl-none">
-                  Thinking...
+                <div className="flex flex-col bg-slate-100 w-fit max-w-[80%] py-3 px-4 rounded-xl rounded-tl-none">
+                  <span className="flex items-center gap-1 text-xs text-slate-700">
+                    <Loader size={14} className="animate-spin" />{' '}
+                    <span className="font-medium">Thinking...</span>
+                  </span>
                 </div>
               </div>
             ) : null,
@@ -141,7 +144,7 @@ const HomePage = () => {
           />
 
           <button
-            className="px-4 py-2 text-sm rounded-lg bg-slate-700 text-slate-200 disabled:bg-slate-400"
+            className="px-4 py-3 text-sm rounded-lg bg-slate-700 text-slate-200 disabled:bg-slate-400"
             disabled={loading}
             onClick={onClickRun}
           >
