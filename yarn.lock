@@ -512,6 +512,7 @@ __metadata:
     "@emotion/styled": ^11.11.0
     "@junhoyeo/cryptogpt": "workspace:^"
     "@next/bundle-analyzer": ^13.4.4
+    "@next/font": ^13.4.6
     "@types/node": ^20.2.5
     "@types/react": ^18.2.7
     "@types/react-dom": ^18.2.4
@@ -561,6 +562,13 @@ __metadata:
   version: 13.4.5
   resolution: "@next/env@npm:13.4.5"
   checksum: bdde73b6f1304fe2f275cbe26d8c447f66701f89afbe6b6a0c489f2dfaa8decc18a1728720c239f6c5dd3bf63a77a324e11105ff9a6cebf72c16ed478dffa9f0
+  languageName: node
+  linkType: hard
+
+"@next/font@npm:^13.4.6":
+  version: 13.4.6
+  resolution: "@next/font@npm:13.4.6"
+  checksum: 9c75c145d8002b4031335a6d8b868a329138f580f4ce70c71c8734f600ea2b7f3af99ccaede5e1ed57b019001fb1928b313f18b00bca97fcbacbef24c57b0151
   languageName: node
   linkType: hard
 

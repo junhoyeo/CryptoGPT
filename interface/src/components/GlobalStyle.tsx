@@ -1,4 +1,10 @@
 import { css, Global } from '@emotion/react';
+import localFont from '@next/font/local';
+
+const archivo = localFont({
+  src: '../fonts/Archivo-Variable.ttf',
+  variable: '--font-archivo',
+});
 
 export const GlobalStyle: React.FC = () => (
   <Global
@@ -6,6 +12,7 @@ export const GlobalStyle: React.FC = () => (
       * {
         box-sizing: border-box;
         word-break: keep-all;
+        font-family: ${archivo.style.fontFamily};
       }
 
       a {
