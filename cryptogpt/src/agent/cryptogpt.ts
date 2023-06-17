@@ -146,7 +146,15 @@ export class AutoGPT {
       console.log(action, JSON.stringify(action));
 
       const streamId = uuidv4();
-      this.res?.write(JSON.stringify({ id: streamId, type: 'agent', ...action.parsed }) + '\n');
+      this.res?.write(
+        JSON.stringify({
+          id: streamId,
+          type: 'agent',
+          error: action.name === 'ERROR',
+          reason: action.name === 'ERROR' ? action.args.text : undefined,
+          ...action.parsed,
+        }) + '\n',
+      );
 
       const tools = this.tools.reduce(
         (acc, tool) => ({ ...acc, [tool.name]: tool }),

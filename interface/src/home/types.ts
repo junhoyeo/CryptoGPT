@@ -39,6 +39,6 @@ export type AgentEvent = {
     | { name: 'evm_getTransactionReceipt'; args: { input: string } }
     | { name: 'finish'; args: { response: string } };
   resolved?: ToolEvent;
-};
+} & ({ error: true; reason: string } | { error: false });
 
 export type ParsedAgentEvent = AgentEvent | ToolEvent | { id: string; type: 'thinking' };
