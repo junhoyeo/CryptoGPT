@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
 import { Config } from '@junhoyeo/cryptogpt';
 import clsx from 'clsx';
+import { Send } from 'lucide-react';
 import getNextConfig from 'next/config';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Input } from '@/components/Input';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
@@ -112,11 +113,35 @@ const HomePage = () => {
     setLoading(false);
   }, [draft]);
 
-  console.log(events);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const bottomBarRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!bottomBarRef.current) return;
+    const resizeObserver = new ResizeObserver(() => {
+      // print height of the bottom bar
+      console.log(bottomBarRef.current?.clientHeight);
+      if (containerRef.current) {
+        containerRef.current.style.paddingBottom = `${bottomBarRef.current?.clientHeight}px`;
+
+        // scroll to bottom with animation
+        setTimeout(() => {
+          window.scrollTo({
+            top: containerRef.current?.offsetHeight || 0,
+            behavior: 'smooth',
+          });
+        });
+      }
+    });
+    resizeObserver.observe(bottomBarRef.current);
+    return () => resizeObserver.disconnect(); // clean up
+  }, []);
 
   return (
     <div className="w-full bg-slate-50">
-      <Container className="container h-full max-w-xl min-h-screen pt-5 pb-10 mx-auto bg-white">
+      <Container
+        ref={containerRef}
+        className="container h-full max-w-xl min-h-screen pt-8 pb-10 mx-auto bg-white"
+      >
         <div className="flex flex-col gap-3">
           {events.map((event) =>
             event.type === 'goal_set' ? (
@@ -130,10 +155,14 @@ const HomePage = () => {
               <ThinkingMessage key={event.id} />
             ) : null,
           )}
+        </div>
+      </Container>
 
+      <div ref={bottomBarRef} className="fixed bottom-0 left-0 right-0 w-full">
+        <GradientContainer className="flex flex-col max-w-xl gap-2 px-4 pt-8 pb-6 mx-auto">
           <Input
             className={clsx(
-              'flex w-full h-10 px-3 py-2',
+              'flex w-full h-10 px-3 py-3',
               'transition-all border rounded-md bg-slate-100 border-input text-sm outline-none',
               'placeholder:text-muted-foreground focus:border-slate-300',
               'disabled:cursor-not-allowed disabled:opacity-50',
@@ -144,14 +173,19 @@ const HomePage = () => {
           />
 
           <button
-            className="px-4 py-3 text-sm rounded-lg bg-slate-800 text-slate-200 disabled:bg-slate-400 disabled:cursor-not-allowed"
+            className={clsx(
+              'flex items-center justify-center gap-2',
+              'w-full px-4 py-4 text-sm rounded-lg bg-slate-800 text-slate-200',
+              'hover:bg-slate-900 hover:text-slate-100 transition-all',
+              'disabled:bg-slate-400 disabled:cursor-not-allowed',
+            )}
             disabled={loading}
             onClick={onClickRun}
           >
-            Run Agent
+            <Send size={14} /> Run Agent
           </button>
-        </div>
-      </Container>
+        </GradientContainer>
+      </div>
     </div>
   );
 };
@@ -159,3 +193,11 @@ const HomePage = () => {
 export default HomePage;
 
 const Container = styled.div``;
+const GradientContainer = styled(Container)`
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #ffffff 40%);
+  pointer-events: none;
+
+  & > * {
+    pointer-events: auto;
+  }
+`;
