@@ -152,7 +152,7 @@ const HomePage = () => {
                 <a href="https://github.com/junhoyeo" target="_blank">
                   <Badge className="hover:bg-slate-200">🏴‍☠️ @junhoyeo</Badge>
                 </a>{' '}
-                <br /> for <Badge>🤖 LLMs</Badge> archiving <Badge>🏦 Financial Autonomy</Badge>
+                <br /> for <Badge>🤖 LLMs</Badge> achieving <Badge>🏦 Financial Autonomy</Badge>
               </p>
               <ul className="flex w-full gap-2 mt-4">
                 <Box>Send zero value transaction to yourself.</Box>
