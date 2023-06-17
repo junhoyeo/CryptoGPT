@@ -1,8 +1,11 @@
 import styled from '@emotion/styled';
 import { Config } from '@junhoyeo/cryptogpt';
+import clsx from 'clsx';
+import { Sparkles } from 'lucide-react';
 import getNextConfig from 'next/config';
 import React, { useCallback, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { Input } from '@/components/Input';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { AgentMessage } from './components/AgentMessage';
 import { ThinkingMessage } from './components/ThinkingMessage';
@@ -112,6 +115,17 @@ const HomePage = () => {
     <div className="w-full bg-slate-50">
       <Container className="container h-full max-w-xl min-h-screen pt-5 pb-10 mx-auto bg-white">
         <div className="flex flex-col gap-3">
+          {draft && loading && (
+            <div className="flex w-full gap-2">
+              <div className="flex flex-col w-fit ml-auto max-w-[80%] py-3 px-4 rounded-xl rounded-tr-none bg-slate-800 text-slate-50">
+                <span className="flex items-center gap-1 text-xs text-slate-300">
+                  <Sparkles size={14} /> <span className="font-medium">Goal</span>
+                </span>
+
+                <p className="text-sm">{draft}</p>
+              </div>
+            </div>
+          )}
           {events.map((event) =>
             event.type === 'agent' ? (
               <AgentMessage key={event.id} event={event} />
@@ -123,15 +137,20 @@ const HomePage = () => {
             ) : null,
           )}
 
-          <input
-            className="flex w-full h-10 px-3 py-2 text-sm bg-transparent border rounded-md border-input placeholder:text-muted-foreground focus-visible:outline-none focus:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+          <Input
+            className={clsx(
+              'flex w-full h-10 px-3 py-2',
+              'transition-all border rounded-md bg-slate-100 border-input text-sm outline-none',
+              'placeholder:text-muted-foreground focus:border-slate-300',
+              'disabled:cursor-not-allowed disabled:opacity-50',
+            )}
             value={draft}
-            onChange={(e) => setDraft(e.target.value)}
+            setValue={setDraft}
             disabled={loading}
           />
 
           <button
-            className="px-4 py-3 text-sm rounded-lg bg-slate-700 text-slate-200 disabled:bg-slate-400 disabled:cursor-not-allowed"
+            className="px-4 py-3 text-sm rounded-lg bg-slate-800 text-slate-200 disabled:bg-slate-400 disabled:cursor-not-allowed"
             disabled={loading}
             onClick={onClickRun}
           >
