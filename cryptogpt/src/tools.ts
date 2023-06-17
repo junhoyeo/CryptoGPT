@@ -1,4 +1,4 @@
-import { JsonRpcProvider, Wallet } from 'ethers';
+import { Interface, JsonRpcProvider, Wallet } from 'ethers';
 import { DynamicStructuredTool, DynamicTool, Tool } from 'langchain/tools';
 import { z } from 'zod';
 import { Config } from './config';
@@ -37,8 +37,10 @@ export const createCryptoGPTTools = (config: Config) => {
     }),
     new DynamicStructuredTool({
       name: 'evm_send',
+      // description:
+      //   'Sign and Broadcast transactions using my wallet. Returns txHash after successful execution. Properties are object of to(required),value(required),nonce,gasLimit,gasPrice,data,chainId. Optional properties, including gas SHOULD be blank if unknown or unnecessary.',
       description:
-        'Sign and Broadcast transactions using my wallet. Returns txHash after successful execution. Properties are object of to(required),value(required),nonce,gasLimit,gasPrice,data,chainId. Optional properties, including gas SHOULD be blank if unknown or unnecessary.',
+        'Sign and Broadcast transactions using my wallet. Returns txHash after successful execution. Properties are object of to(required),value(required),nonce,gasLimit,gasPrice,data. Optional properties, including gas SHOULD be blank if unknown or unnecessary.',
       schema: z.object({
         to: z.string(),
         value: z.any().optional(),
@@ -46,7 +48,7 @@ export const createCryptoGPTTools = (config: Config) => {
         gasLimit: z.any().optional(),
         gasPrice: z.any().optional(),
         data: z.string().optional(),
-        chainId: z.any().optional(),
+        // chainId: z.any().optional(),
       }),
       func: async (params) => {
         const tx = Object.fromEntries(Object.entries(params).filter(([_, v]) => v !== ''));
@@ -72,6 +74,16 @@ export const createCryptoGPTTools = (config: Config) => {
       func: async (txHash: any) => {
         const receipt = await provider.getTransactionReceipt(txHash);
         return receipt?.toJSON();
+      },
+    }),
+    new DynamicTool({
+      name: 'evm_encodeFunctionData',
+      description: 'Receives {abi:ABI[],params:any[]} and returns the encoded data of a function call',
+      func: async (params: any) => {
+        const abi = Array.isArray(params.abi) ? params.abi : [params.abi];
+        const iface = new Interface(abi);
+        const data = iface.encodeFunctionData(params.params);
+        return data;
       },
     }),
   ] as Tool[];
