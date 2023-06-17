@@ -3,6 +3,7 @@ import { Config } from '@junhoyeo/cryptogpt';
 import { Loader, Wrench } from 'lucide-react';
 import getNextConfig from 'next/config';
 import React, { useCallback, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { AgentMessage } from './AgentMessage';
 import { AgentEvent, ParsedAgentEvent } from './types';
@@ -30,7 +31,7 @@ const HomePage = () => {
     setLoading(true);
 
     // add thinking
-    events.push({ id: 'thinking', type: 'thinking' });
+    events.push({ id: uuidv4(), type: 'thinking' });
 
     const response = await fetch('/api/run_agent', {
       method: 'POST',
@@ -67,12 +68,9 @@ const HomePage = () => {
           return event;
         });
 
-        if (decodedEvents.length > 0) {
-          // remove thinking
-          setEvents((events) => events.filter((event) => event.id !== 'thinking'));
-        }
         setEvents((events) => {
-          const newEvents = [...events];
+          const newEvents = [...events.filter((ev) => ev.type !== 'thinking')];
+
           for (const event of decodedEvents) {
             if (event.type === 'tool') {
               const foundEvent = newEvents.find((e) => e.id === event.id && e.type === 'agent') as AgentEvent;
@@ -93,7 +91,10 @@ const HomePage = () => {
         } else {
           setTimeout(() => {
             // add thinking
-            setEvents((events) => [...events, { id: 'thinking', type: 'thinking' }]);
+            setEvents((events) => [
+              ...events.filter((ev) => ev.type !== 'thinking'),
+              { id: uuidv4(), type: 'thinking' },
+            ]);
           }, 200);
         }
       } catch (error) {
