@@ -14,7 +14,7 @@ type AgentMessageProps = {
 export const AgentMessage: React.FC<AgentMessageProps> = ({ event }) => {
   const commandArgs = useMemo(() => {
     try {
-      return cleanObject(event.command.args);
+      return cleanObject(event?.command?.args || {});
     } catch (e) {
       console.error(e);
       return {};

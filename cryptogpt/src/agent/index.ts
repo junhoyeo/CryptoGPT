@@ -5,9 +5,9 @@ import { NextApiResponse } from 'next';
 import { Config } from '@/config';
 import { createCryptoGPTTools } from '@/tools';
 import { AutoGPT } from './cryptogpt';
-import { OutputParser } from './parser';
+import { AutoGPTOutputFixingParser, OutputParser } from './parser';
 
-const outputParser = new OutputParser();
+const defaultOutputParser = new OutputParser();
 
 export const createCryptoGPTAgent = (config: Config, res?: NextApiResponse) => {
   const embeddings = new OpenAIEmbeddings({
@@ -15,8 +15,13 @@ export const createCryptoGPTAgent = (config: Config, res?: NextApiResponse) => {
   });
   const vectorStore = new MemoryVectorStore(embeddings);
   const model = new ChatOpenAI(
-    { temperature: 0, openAIApiKey: config.OPENAI_API_KEY },
+    { temperature: 0, openAIApiKey: config.OPENAI_API_KEY, maxTokens: -1 },
     { basePath: config.OPENAI_API_BASE_PATH },
+  );
+
+  const outputParser = AutoGPTOutputFixingParser.fromLLM(
+    new ChatOpenAI({ temperature: 0 }),
+    defaultOutputParser,
   );
 
   return AutoGPT.fromLLMAndTools(
