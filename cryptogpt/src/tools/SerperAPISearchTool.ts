@@ -91,5 +91,5 @@ export class SerperAPISearchTool extends Tool {
   }
 
   description =
-    'a search engine. useful for when you need to answer questions about current events. input should be a search query. you can use web browser tool to inspect the result more.';
+    'a search engine. useful for when you need to answer questions about current events. input should be a search query. if results are incomplete, you can define task, and use web browser tool to inspect the result more.';
 }
