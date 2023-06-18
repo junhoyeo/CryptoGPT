@@ -7,7 +7,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Input } from '@/components/Input';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
-import { shortenAddress } from '@/utils/address';
 import { AgentMessage } from './components/AgentMessage';
 import { GoalMessage } from './components/GoalMessage';
 import { ThinkingMessage } from './components/ThinkingMessage';

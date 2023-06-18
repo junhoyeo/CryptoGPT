@@ -1,10 +1,11 @@
 import { Interface, JsonRpcProvider, Wallet } from 'ethers';
 import { BaseLanguageModel } from 'langchain/base_language';
 import { Embeddings } from 'langchain/embeddings/base';
-import { DynamicStructuredTool, DynamicTool, Serper, Tool } from 'langchain/tools';
+import { DynamicStructuredTool, DynamicTool, Tool } from 'langchain/tools';
 import { WebBrowser } from 'langchain/tools/webbrowser';
 import { z } from 'zod';
-import { Config } from './config';
+import { Config } from '../config';
+import { SerperAPISearchTool } from './SerperAPISearchTool';
 
 type CreateCryptoGPTToolsProps = {
   config: Config;
@@ -17,7 +18,7 @@ export const createCryptoGPTTools = ({ config, model, embeddings }: CreateCrypto
   const signer = wallet.connect(provider);
 
   return [
-    new Serper(config.SERPER_API_KEY, {
+    new SerperAPISearchTool(config.SERPER_API_KEY, {
       gl: 'us',
       hl: 'en',
     }),
