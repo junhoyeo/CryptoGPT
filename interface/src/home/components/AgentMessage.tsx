@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { Box, CheckCircle, Loader, XCircle, Zap } from 'lucide-react';
-import React, { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { shortenAddress } from '@/utils/address';
 import { AgentEvent } from '../types/events';
 
@@ -23,8 +23,13 @@ export const AgentMessage: React.FC<AgentMessageProps> = ({ event }) => {
 
   const hasContent = !event.error || (event.error && !!event.reason);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }, [containerRef.current]);
+
   return (
-    <div className="flex w-full gap-2">
+    <div ref={containerRef} className="flex w-full gap-2">
       <img src="/assets/agent.png" className="w-8 h-8 rounded" />
       <div
         className={clsx(
