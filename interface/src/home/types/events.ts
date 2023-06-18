@@ -40,7 +40,7 @@ export type AgentEvent = {
     | { name: 'finish'; args: { response: string } }
     | { name: string; args: object };
   resolved?: ToolEvent;
-} & ({ error: true; reason: string } | { error: false });
+} & ({ error: true; text: string } | { error: false });
 
 export type ThinkingEvent = {
   id: string;

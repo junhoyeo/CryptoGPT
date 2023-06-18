@@ -21,7 +21,7 @@ export const AgentMessage: React.FC<AgentMessageProps> = ({ event }) => {
     }
   }, [event?.command?.args]);
 
-  const hasContent = !event.error || (event.error && !!event.reason);
+  const hasContent = !event.error || (event.error && !!event.text);
 
   return (
     <div className="flex w-full gap-2">
@@ -50,7 +50,7 @@ export const AgentMessage: React.FC<AgentMessageProps> = ({ event }) => {
         {hasContent && (
           <div className="flex flex-col gap-2 mt-2">
             {event.error ? (
-              <p className="text-sm leading-snug text-red-900">{event.reason}</p>
+              <p className="text-sm leading-snug text-red-900">{event.text}</p>
             ) : (
               <>
                 <p className="text-sm leading-snug">{event.thoughts.reasoning}</p>
@@ -102,7 +102,7 @@ export const AgentMessage: React.FC<AgentMessageProps> = ({ event }) => {
                       </div>
                     ) : null}
                     {!event.resolved ? (
-                      <div className="flex flex-col px-1 py-1 pt-2 mt-2 bg-yellow-200 border border-yellow-500 rounded">
+                      <div className="flex flex-col px-1 py-2 bg-yellow-200 border border-yellow-500 rounded">
                         <span className="flex items-center gap-1 text-xs leading-none text-yellow-800">
                           <Loader size={12} className="animate-spin" />{' '}
                           <span className="font-medium">Loading</span>
