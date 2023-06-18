@@ -38,7 +38,7 @@ export const EXAMPLE_PROMPTS = [
       </>
     ),
     prompt:
-      'Wrap 1 ETH to WETH deployed to 0x043c471bEe060e00A56CcD02c0Ca286808a5A436. ABI is {"constant":false,"inputs":[],"name":"deposit","outputs":[],"payable":true,"stateMutabiBoxty":"payable","type":"function"}.',
+      'Wrap 1 ETH to WETH deployed to 0x043c471bEe060e00A56CcD02c0Ca286808a5A436. ABI is {"constant":false,"inputs":[],"name":"deposit","outputs":[],"payable":true,"stateMutability":"payable","type":"function"}.',
   },
   {
     display: (
