@@ -151,7 +151,7 @@ export class AutoGPT {
           id: streamId,
           type: 'agent',
           error: action.name === 'ERROR',
-          reason: action.name === 'ERROR' ? action.args.text : undefined,
+          text: action.name === 'ERROR' ? action.args.error : undefined,
           ...action.parsed,
         }) + '\n',
       );
