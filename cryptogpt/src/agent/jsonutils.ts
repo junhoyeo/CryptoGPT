@@ -66,6 +66,12 @@ function addQuotesToPropertyNames(jsonString: string): string | null {
 }
 
 export function correctJson(jsonToLoad: string): string | null {
+  if (!jsonToLoad.startsWith('{')) {
+    const fragments = jsonToLoad.split('{');
+    if (fragments.length > 1) {
+      jsonToLoad = '{' + fragments.slice(1).join('{');
+    }
+  }
   try {
     console.debug('json', jsonToLoad);
     JSON.parse(jsonToLoad);

@@ -29,7 +29,12 @@ module.exports = withPlugins(
     compiler: {
       styledComponents: true,
     },
-    publicRuntimeConfig: pick(process.env, ['OPENAI_API_KEY', 'JSON_RPC_URL', 'WALLET_PRIVATE_KEY']),
+    publicRuntimeConfig: pick(process.env, [
+      'OPENAI_API_KEY',
+      'SERPER_API_KEY',
+      'JSON_RPC_URL',
+      'WALLET_PRIVATE_KEY',
+    ]),
   },
   [withBundleAnalyzer],
 );

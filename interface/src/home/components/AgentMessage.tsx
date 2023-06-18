@@ -14,14 +14,14 @@ type AgentMessageProps = {
 export const AgentMessage: React.FC<AgentMessageProps> = ({ event }) => {
   const commandArgs = useMemo(() => {
     try {
-      return cleanObject(event.command.args);
+      return cleanObject(event?.command?.args || {});
     } catch (e) {
       console.error(e);
       return {};
     }
   }, [event?.command?.args]);
 
-  const hasContent = !event.error || (event.error && !!event.reason);
+  const hasContent = !event.error || (event.error && !!event.text);
 
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -55,7 +55,7 @@ export const AgentMessage: React.FC<AgentMessageProps> = ({ event }) => {
         {hasContent && (
           <div className="flex flex-col gap-2 mt-2">
             {event.error ? (
-              <p className="text-sm leading-snug text-red-900">{event.reason}</p>
+              <p className="text-sm leading-snug text-red-900">{event.text}</p>
             ) : (
               <>
                 <p className="text-sm leading-snug">{event.thoughts.reasoning}</p>
@@ -92,7 +92,7 @@ export const AgentMessage: React.FC<AgentMessageProps> = ({ event }) => {
                                       );
                                     }
                                     if (typeof value !== 'string') {
-                                      return value;
+                                      return JSON.stringify(value);
                                     }
                                     if (value.length === 42 && value.startsWith('0x')) {
                                       return shortenAddress(value);
@@ -107,7 +107,7 @@ export const AgentMessage: React.FC<AgentMessageProps> = ({ event }) => {
                       </div>
                     ) : null}
                     {!event.resolved ? (
-                      <div className="flex flex-col px-1 py-1 pt-2 mt-2 bg-yellow-200 border border-yellow-500 rounded">
+                      <div className="flex flex-col px-1 py-2 bg-yellow-200 border border-yellow-500 rounded">
                         <span className="flex items-center gap-1 text-xs leading-none text-yellow-800">
                           <Loader size={12} className="animate-spin" />{' '}
                           <span className="font-medium">Loading</span>
@@ -115,9 +115,16 @@ export const AgentMessage: React.FC<AgentMessageProps> = ({ event }) => {
                       </div>
                     ) : (
                       <div className="flex flex-col px-2 py-2 mt-2 border rounded bg-emerald-200 border-emerald-500">
-                        <span className="flex items-center gap-1 text-xs leading-none text-emerald-800">
-                          <CheckCircle size={12} /> <span className="font-medium">Resolved</span>
-                        </span>
+                        {!event.error && (
+                          <span className="flex items-center gap-1 text-xs leading-none text-emerald-800">
+                            <CheckCircle size={12} /> <span className="font-medium">Resolved</span>
+                          </span>
+                        )}
+                        {event.error && (
+                          <span className="flex items-center gap-1 text-xs leading-none text-red-800">
+                            <CheckCircle size={12} /> <span className="font-medium">Error</span>
+                          </span>
+                        )}
 
                         <div className="h-[1px] w-full bg-emerald-300 my-[6px]" />
 

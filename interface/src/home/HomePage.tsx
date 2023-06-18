@@ -7,7 +7,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Input } from '@/components/Input';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
-import { shortenAddress } from '@/utils/address';
 import { AgentMessage } from './components/AgentMessage';
 import { GoalMessage } from './components/GoalMessage';
 import { ThinkingMessage } from './components/ThinkingMessage';
@@ -25,6 +24,7 @@ const HomePage = () => {
   const [events, setEvents] = useState<CryptoGPTEvent[]>([]);
   const [config, setConfig] = useLocalStorage<Config>('@config', {
     OPENAI_API_KEY: publicRuntimeConfig.OPENAI_API_KEY,
+    SERPER_API_KEY: publicRuntimeConfig.SERPER_API_KEY,
     JSON_RPC_URL: publicRuntimeConfig.JSON_RPC_URL,
     WALLET_PRIVATE_KEY: publicRuntimeConfig.WALLET_PRIVATE_KEY,
   });
