@@ -12,6 +12,8 @@
 
 ## 🏴‍☠️ Demo
 
+![Home Screen](./cryptogpt/../.github/home.png)
+
 | ✅ Send zero value transaction                                      | ✅ Wrap ETH to WETH                                      |
 | :------------------------------------------------------------------ | :------------------------------------------------------- |
 | ![Demo Image 1 - Send zero value transaction](./.github/demo-1.png) | ![Demo Image 2 - Wrap ETH to WETH](./.github/demo-2.png) |
