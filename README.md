@@ -24,6 +24,7 @@ git clone https://github.com/junhoyeo/CryptoGPT
 
 ```bash
 OPENAI_API_KEY=sk-*****
+SERPER_API_KEY=
 WALLET_PRIVATE_KEY=0x*****
 OPENAI_API_BASE_PATH=
 JSON_RPC_URL=
@@ -70,6 +71,7 @@ python3 gpt4free-openai-proxy/main.py
 
 ```bash
 OPENAI_API_KEY=sk-*****
+SERPER_API_KEY=
 WALLET_PRIVATE_KEY=0x*****
 OPENAI_API_BASE_PATH=http://127.0.0.1:5000
 JSON_RPC_URL=

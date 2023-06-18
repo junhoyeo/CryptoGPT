@@ -10,21 +10,22 @@ import { OutputParser } from './parser';
 const outputParser = new OutputParser();
 
 export const createCryptoGPTAgent = (config: Config, res?: NextApiResponse) => {
-  const vectorStore = new MemoryVectorStore(
-    new OpenAIEmbeddings({
-      openAIApiKey: config.OPENAI_API_KEY,
-    }),
+  const embeddings = new OpenAIEmbeddings({
+    openAIApiKey: config.OPENAI_API_KEY,
+  });
+  const vectorStore = new MemoryVectorStore(embeddings);
+  const model = new ChatOpenAI(
+    { temperature: 0, openAIApiKey: config.OPENAI_API_KEY },
+    { basePath: config.OPENAI_API_BASE_PATH },
   );
+
   return AutoGPT.fromLLMAndTools(
-    new ChatOpenAI(
-      {
-        // modelName: 'gpt-4-0613',
-        temperature: 0,
-        openAIApiKey: config.OPENAI_API_KEY,
-      },
-      { basePath: config.OPENAI_API_BASE_PATH },
-    ),
-    createCryptoGPTTools(config),
+    model,
+    createCryptoGPTTools({
+      config,
+      model,
+      embeddings,
+    }),
     {
       memory: vectorStore.asRetriever(),
       outputParser: outputParser,

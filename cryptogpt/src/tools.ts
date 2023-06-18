@@ -1,14 +1,27 @@
 import { Interface, JsonRpcProvider, Wallet } from 'ethers';
-import { DynamicStructuredTool, DynamicTool, Tool } from 'langchain/tools';
+import { BaseLanguageModel } from 'langchain/base_language';
+import { Embeddings } from 'langchain/embeddings/base';
+import { DynamicStructuredTool, DynamicTool, Serper, Tool } from 'langchain/tools';
+import { WebBrowser } from 'langchain/tools/webbrowser';
 import { z } from 'zod';
 import { Config } from './config';
 
-export const createCryptoGPTTools = (config: Config) => {
+type CreateCryptoGPTToolsProps = {
+  config: Config;
+  model: BaseLanguageModel;
+  embeddings: Embeddings;
+};
+export const createCryptoGPTTools = ({ config, model, embeddings }: CreateCryptoGPTToolsProps) => {
   const provider = new JsonRpcProvider(config.JSON_RPC_URL);
   const wallet = new Wallet(config.WALLET_PRIVATE_KEY || '');
   const signer = wallet.connect(provider);
 
   return [
+    new Serper(config.SERPER_API_KEY, {
+      gl: 'us',
+      hl: 'en',
+    }),
+    new WebBrowser({ model, embeddings }),
     new DynamicTool({
       name: 'print',
       description: 'Print value(string) to user',

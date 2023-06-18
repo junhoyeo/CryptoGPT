@@ -12,6 +12,8 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
+    "axios": "^1.4.0",
+    "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.1.4",
     "ethers": "^6.5.1",
     "find-yarn-workspace-root": "^2.0.0",

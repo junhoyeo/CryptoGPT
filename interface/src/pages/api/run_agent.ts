@@ -5,6 +5,7 @@ import { z } from 'zod';
 const configSchema = z
   .object({
     OPENAI_API_KEY: z.string(),
+    SERPER_API_KEY: z.string(),
     WALLET_PRIVATE_KEY: z.string(), // FIXME: This should only by processed in-browser
     OPENAI_API_BASE_PATH: z.string().or(z.undefined()),
     JSON_RPC_URL: z.string(),
