@@ -37,7 +37,8 @@ export type AgentEvent = {
         };
       }
     | { name: 'evm_getTransactionReceipt'; args: { input: string } }
-    | { name: 'finish'; args: { response: string } };
+    | { name: 'finish'; args: { response: string } }
+    | { name: string; args: object };
   resolved?: ToolEvent;
 } & ({ error: true; reason: string } | { error: false });
 
