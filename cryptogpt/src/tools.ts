@@ -89,9 +89,13 @@ export const createCryptoGPTTools = ({ config, model, embeddings }: CreateCrypto
         return receipt?.toJSON();
       },
     }),
-    new DynamicTool({
+    new DynamicStructuredTool({
       name: 'evm_encodeFunctionData',
       description: 'Receives {abi:ABI[],params:any[]} and returns the encoded data of a function call',
+      schema: z.object({
+        abi: z.array(z.any()).or(z.any()),
+        params: z.array(z.any()),
+      }),
       func: async (params: any) => {
         const abi = Array.isArray(params.abi) ? params.abi : [params.abi];
         const iface = new Interface(abi);
