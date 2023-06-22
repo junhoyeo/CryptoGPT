@@ -18,6 +18,20 @@
 | :------------------------------------------------------------------ | :------------------------------------------------------- |
 | ![Demo Image 1 - Send zero value transaction](./.github/demo-1.png) | ![Demo Image 2 - Wrap ETH to WETH](./.github/demo-2.png) |
 
+## Notice
+- ⚠️ Warning: It is important to be cautious while using this application. Please be aware that your private keys are sent as plain text in each request, and the language model (LLM) may carry out unknown actions using your keys. This could potentially lead to the loss of any assets or data you have. Therefore, it is strongly advised not to utilize this application in a production environment or expose your active private key.
+- The current version is a preliminary Proof of Concept (PoC) that heavily leverages [Langchain](https://github.com/hwchase17/langchain).
+- Notable Tech Stack: Next.js & TailwindCSS, Vercel Serverless Functions, and LangChain.js
+
+## Roadmap/Backlog
+- [ ] Modal to manage API keys in the frontend(`interface`)
+- [ ] Database for known ABI/Tokens in Testnet(Ethereum Goerli or any EVM-equivalent chain that we anyone can easily get hands on faucet)
+- [ ] Support Cross-Chain, Explore Bridges
+- [ ] [Stream Responses](https://vercel.com/blog/introducing-the-vercel-ai-sdk)
+- [ ] Support More Models, Use [microsoft/guidance](https://github.com/microsoft/guidance) for performance
+- [ ] Introduce an option for users to approve transactions using their wallets, enabling the execution of LLM-generated transactions without the need to pass private keys. Set that option as the default for our Vercel Deployment
+- [ ] Better Documentation
+
 ## 📦 Setup - [OpenAI API](https://openai.com/blog/openai-api)
 
 ### 1. Clone this repo
