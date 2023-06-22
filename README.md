@@ -19,7 +19,7 @@
 | ![Demo Image 1 - Send zero value transaction](./.github/demo-1.png) | ![Demo Image 2 - Wrap ETH to WETH](./.github/demo-2.png) |
 
 ## Notice
-- **⚠️ Warning: It is important to be cautious while using this application. Please be aware that your private keys are sent as plain text in each request, and the language model (LLM) may carry out unknown actions using your keys. This could potentially lead to the loss of any assets or data you have (if any). Therefore, it is strongly advised not to utilize this application in a production environment or expose your active private key.**
+- **⚠️ Warning: It is important to be cautious while using this application. Please be aware that your private keys are currently sent as _plaintext_ in each request, and the language model (LLM) may carry out unknown actions using your keys. This could potentially lead to the loss of any assets or data you have (if any). Therefore, it is strongly advised not to utilize this application in a production environment or expose your active private key.**
 - The current version is a preliminary Proof of Concept (PoC) that heavily leverages [Langchain](https://github.com/hwchase17/langchain).
 - Our Tech Stack: Next.js & TailwindCSS, Vercel Serverless Functions, and LangChain.js
 
