@@ -19,9 +19,9 @@
 | ![Demo Image 1 - Send zero value transaction](./.github/demo-1.png) | ![Demo Image 2 - Wrap ETH to WETH](./.github/demo-2.png) |
 
 ## Notice
-- ⚠️ Warning: It is important to be cautious while using this application. Please be aware that your private keys are sent as plain text in each request, and the language model (LLM) may carry out unknown actions using your keys. This could potentially lead to the loss of any assets or data you have. Therefore, it is strongly advised not to utilize this application in a production environment or expose your active private key.
+- **⚠️ Warning: It is important to be cautious while using this application. Please be aware that your private keys are sent as plain text in each request, and the language model (LLM) may carry out unknown actions using your keys. This could potentially lead to the loss of any assets or data you have (if any). Therefore, it is strongly advised not to utilize this application in a production environment or expose your active private key.**
 - The current version is a preliminary Proof of Concept (PoC) that heavily leverages [Langchain](https://github.com/hwchase17/langchain).
-- Notable Tech Stack: Next.js & TailwindCSS, Vercel Serverless Functions, and LangChain.js
+- Our Tech Stack: Next.js & TailwindCSS, Vercel Serverless Functions, and LangChain.js
 
 ## Roadmap/Backlog
 - [ ] Modal to manage API keys in the frontend(`interface`)
